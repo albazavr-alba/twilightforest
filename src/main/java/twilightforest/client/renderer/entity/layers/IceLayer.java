@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.block.Blocks;
@@ -53,9 +54,9 @@ public class IceLayer<S extends LivingEntityRenderState, M extends EntityModel<S
 			stack.translate(-0.5F, -0.5F, -0.5F);
 
 			BlockPos entityPos = new BlockPos(
-				net.minecraft.util.Mth.floor(state.x),
-				net.minecraft.util.Mth.floor(state.y),
-				net.minecraft.util.Mth.floor(state.z)
+				Mth.floor(state.x),
+				Mth.floor(state.y),
+				Mth.floor(state.z)
 			);
 
 			MovingBlockRenderState movingState = new MovingBlockRenderState();

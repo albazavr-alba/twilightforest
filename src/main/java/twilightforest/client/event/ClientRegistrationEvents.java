@@ -1,7 +1,6 @@
 package twilightforest.client.event;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.animal.wolf.AdultWolfModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
@@ -24,8 +23,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -47,7 +44,6 @@ import twilightforest.client.*;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.armor.*;
 import twilightforest.client.model.block.BrazierModel;
-import twilightforest.client.model.block.ReactorDebrisModel;
 import twilightforest.client.model.block.aurorablock.UnbakedNoiseVaryingBlockStateModel;
 import twilightforest.client.model.block.carpet.RoyalRagsModelLoader;
 import twilightforest.client.model.block.connected.ConnectedTextureModelLoader;
@@ -56,7 +52,6 @@ import twilightforest.client.model.block.giantblock.UnbakedGiantBlockStateModel;
 import twilightforest.client.model.block.patch.PatchModelLoader;
 import twilightforest.client.model.entity.*;
 import twilightforest.client.model.item.TravellersGearItemModel;
-import twilightforest.client.model.item.TrollsteinnModel;
 import twilightforest.client.particle.*;
 import twilightforest.client.properties.*;
 import twilightforest.client.renderer.armor.TFArmorRenderer;
@@ -77,8 +72,6 @@ import twilightforest.item.travellers_gear.TravellersArmorItem;
 import twilightforest.item.travellers_gear.TravellersGogglesItem;
 import twilightforest.util.woods.TFWoodTypes;
 
-import java.util.Objects;
-
 @Component(dist = Dist.CLIENT)
 public class ClientRegistrationEvents {
 
@@ -87,10 +80,7 @@ public class ClientRegistrationEvents {
 	@PostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(EntityRenderersEvent.AddLayers.class, this::attachRenderLayers);
-		bus.addListener(this::bakeCustomModels);
-		bus.addListener(this::cacheJarLids);
 		bus.addListener(this::clientSetup);
-		bus.addListener(this::registerAdditionalModels);
 		bus.addListener(this::registerClientReloadListeners);
 		bus.addListener(this::registerAtlases);
 		bus.addListener(this::registerEntityRenderers);
@@ -110,8 +100,6 @@ public class ClientRegistrationEvents {
 
 		bus.addListener(ColorHandler::registerBlockColors);
 		bus.addListener(ColorHandler::registerItemColors);
-
-		bus.addListener(TFShaders::registerShaders);
 
 		bus.addListener(OverlayHandler::registerOverlays);
 
@@ -150,36 +138,6 @@ public class ClientRegistrationEvents {
 
 	private void registerSelectProperties(RegisterSelectItemModelPropertyEvent event) {
 		event.register(TwilightForestMod.prefix("experiment_115_variant"), Experiment115Type.TYPE);
-	}
-
-	private void bakeCustomModels(ModelEvent.ModifyBakingResult event) {
-		BakedModel oldModel = event.getModels().get(ModelResourceLocation.inventory(TwilightForestMod.prefix("trollsteinn")));
-		models.put(ModelResourceLocation.inventory(TwilightForestMod.prefix("trollsteinn")), new TrollsteinnModel(oldModel));
-		BakedModel defaultReactorDebrisModel = event.getModels().get(ModelResourceLocation.vanilla("netherrack", ""));
-		models.put(new ModelResourceLocation(TwilightForestMod.prefix("reactor_debris"), ""), new ReactorDebrisModel(defaultReactorDebrisModel));
-	}
-
-	private void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
-		event.register(ShieldLayer.LOC);
-		event.register(ModelResourceLocation.standalone(TwilightForestMod.prefix("item/trophy")));
-		event.register(ModelResourceLocation.standalone(TwilightForestMod.prefix("item/trophy_minor")));
-		event.register(ModelResourceLocation.standalone(TwilightForestMod.prefix("item/trophy_quest")));
-		event.register(TrollsteinnModel.LIT_TROLLSTEINN);
-
-		for (JarRenderer.LidResource lid : JarRenderer.LID_LOCATION_LIST.get()) {
-			Identifier location = lid.identifier();
-			String name = location.getPath();
-			if (lid.customPath() != null) name = lid.customPath();
-			event.register(ModelResourceLocation.standalone(TwilightForestMod.prefix("block/lid/" + name)));
-		}
-	}
-
-	private void cacheJarLids(ModelEvent.BakingCompleted event) {
-		JarRenderer.LID_LOCATION_LIST.get().forEach((lid) -> {
-			String name = lid.identifier().getPath();
-			if (lid.customPath() != null) name = lid.customPath();
-			JarRenderer.LIDS.put(lid.lid(), event.getModels().get(ModelResourceLocation.standalone(TwilightForestMod.prefix("block/lid/" + name))));
-		});
 	}
 
 	private void clientSetup(FMLClientSetupEvent evt) {
@@ -586,20 +544,22 @@ public class ClientRegistrationEvents {
 		BakedMultiPartRenderers.bakeMultiPartRenderers(event.getContext());
 		for (EntityType<?> type : event.getEntityTypes()) {
 			var renderer = event.getRenderer(type);
-			if (renderer instanceof LivingEntityRenderer<?, ?> living) {
-				attachRenderLayers(living);
+			if (renderer instanceof LivingEntityRenderer<?, ?, ?> living) {
+				attachToLiving(living);
 			}
 		}
-
-		event.getSkins().forEach(renderer -> {
-			LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);
-			attachRenderLayers(Objects.requireNonNull(skin));
+		event.getSkins().forEach(skinName -> {
+			var skinRenderer = event.getPlayerRenderer(skinName);
+			if (skinRenderer != null) {
+				attachToLiving(skinRenderer);
+			}
 		});
 	}
 
-	private <T extends LivingEntity, M extends EntityModel<T>> void attachRenderLayers(LivingEntityRenderer<T, M> renderer) {
-		renderer.addLayer(new ShieldLayer<>(renderer));
-		renderer.addLayer(new IceLayer<>(renderer));
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static void attachToLiving(net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?, ?> renderer) {
+		renderer.addLayer(new ShieldLayer(renderer));
+		renderer.addLayer(new IceLayer(renderer));
 	}
 
 	public static boolean isOptifinePresent() {

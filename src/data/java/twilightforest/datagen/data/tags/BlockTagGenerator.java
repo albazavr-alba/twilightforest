@@ -1,9 +1,12 @@
 package twilightforest.datagen.data.tags;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import twilightforest.datagen.data.tags.compat.ModdedBlockTagGenerator;
@@ -288,16 +291,17 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 
 		this.tag(BlockTags.FROG_PREFER_JUMP_TO).add(TFBlocks.HUGE_LILY_PAD.get());
 
-		this.tag(TFBlockTags.TROPHIES)
-			.add(TFBlocks.NAGA_TROPHY.get(), TFBlocks.NAGA_WALL_TROPHY.get())
-			.add(TFBlocks.LICH_TROPHY.get(), TFBlocks.LICH_WALL_TROPHY.get())
-			.add(TFBlocks.MINOSHROOM_TROPHY.get(), TFBlocks.MINOSHROOM_WALL_TROPHY.get())
-			.add(TFBlocks.HYDRA_TROPHY.get(), TFBlocks.HYDRA_WALL_TROPHY.get())
-			.add(TFBlocks.KNIGHT_PHANTOM_TROPHY.get(), TFBlocks.KNIGHT_PHANTOM_WALL_TROPHY.get())
-			.add(TFBlocks.UR_GHAST_TROPHY.get(), TFBlocks.UR_GHAST_WALL_TROPHY.get())
-			.add(TFBlocks.ALPHA_YETI_TROPHY.get(), TFBlocks.ALPHA_YETI_WALL_TROPHY.get())
-			.add(TFBlocks.SNOW_QUEEN_TROPHY.get(), TFBlocks.SNOW_QUEEN_WALL_TROPHY.get())
-			.add(TFBlocks.QUEST_RAM_TROPHY.get(), TFBlocks.QUEST_RAM_WALL_TROPHY.get());
+		// Uncomment this when trophies will be fixed
+//		this.tag(TFBlockTags.TROPHIES)
+//			.add(TFBlocks.NAGA_TROPHY.get(), TFBlocks.NAGA_WALL_TROPHY.get())
+//			.add(TFBlocks.LICH_TROPHY.get(), TFBlocks.LICH_WALL_TROPHY.get())
+//			.add(TFBlocks.MINOSHROOM_TROPHY.get(), TFBlocks.MINOSHROOM_WALL_TROPHY.get())
+//			.add(TFBlocks.HYDRA_TROPHY.get(), TFBlocks.HYDRA_WALL_TROPHY.get())
+//			.add(TFBlocks.KNIGHT_PHANTOM_TROPHY.get(), TFBlocks.KNIGHT_PHANTOM_WALL_TROPHY.get())
+//			.add(TFBlocks.UR_GHAST_TROPHY.get(), TFBlocks.UR_GHAST_WALL_TROPHY.get())
+//			.add(TFBlocks.ALPHA_YETI_TROPHY.get(), TFBlocks.ALPHA_YETI_WALL_TROPHY.get())
+//			.add(TFBlocks.SNOW_QUEEN_TROPHY.get(), TFBlocks.SNOW_QUEEN_WALL_TROPHY.get())
+//			.add(TFBlocks.QUEST_RAM_TROPHY.get(), TFBlocks.QUEST_RAM_WALL_TROPHY.get());
 
 		this.tag(TFBlockTags.FIRE_JET_FUEL).add(Blocks.LAVA);
 
@@ -377,15 +381,19 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 			TFBlocks.GHAST_TRAP.get(),
 			TFBlocks.FAKE_DIAMOND.get(),
 			TFBlocks.FAKE_GOLD.get()
-		).addTag(TFBlockTags.COMMON_PROTECTIONS).addOptional(Identifier.parse("gravestone:gravestone"));
+		).addTag(TFBlockTags.COMMON_PROTECTIONS);
+		this.getOrCreateRawBuilder(TFBlockTags.ANTIBUILDER_IGNORES)
+			.addOptionalElement(Identifier.parse("gravestone:gravestone"));
 
 		this.tag(TFBlockTags.STRUCTURE_BANNED_INTERACTIONS).add(Blocks.LEVER).add(TFBlocks.ANTIBUILDER.get()).addTags(BlockTags.BUTTONS, Tags.Blocks.CHESTS);
 
 		// TODO add more grave mods to this list
 		this.tag(TFBlockTags.PROGRESSION_ALLOW_BREAKING)
 			.add(TFBlocks.SKULL_CHEST.get())
-			.add(TFBlocks.KEEPSAKE_CASKET.get())
-			.addOptional(Identifier.fromNamespaceAndPath("gravestone", "gravestone"));
+			.add(TFBlocks.KEEPSAKE_CASKET.get());
+		this.getOrCreateRawBuilder(TFBlockTags.PROGRESSION_ALLOW_BREAKING)
+			.addOptionalElement(Identifier.fromNamespaceAndPath("gravestone", "gravestone"));
+
 
 		this.tag(TFBlockTags.CANNOT_TROLL_CAVE_HOLLOW)
 			.add(Blocks.RED_MUSHROOM_BLOCK)
@@ -425,8 +433,6 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 
 		this.tag(BlockTags.DAMPENS_VIBRATIONS).addTag(TFBlockTags.CLOUDS).add(TFBlocks.ARCTIC_FUR_BLOCK.get());
 		this.tag(BlockTags.OCCLUDES_VIBRATION_SIGNALS).add(TFBlocks.ARCTIC_FUR_BLOCK.get());
-
-		this.tag(BlockTags.SMALL_DRIPLEAF_PLACEABLE).add(TFBlocks.UBEROUS_SOIL.get());
 
 		this.tag(BlockTags.FEATURES_CANNOT_REPLACE).addTag(TFBlockTags.COMMON_PROTECTIONS).add(TFBlocks.LIVEROOT_BLOCK.get(), TFBlocks.MANGROVE_ROOT.get(), TFBlocks.SINISTER_SPAWNER.get());
 		// For anything that permits replacement during Worldgen
@@ -624,8 +630,6 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 		);
 
 		this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(TFBlocks.AURORA_BLOCK.get()).addTags(TFBlockTags.CASTLE_BLOCKS, TFBlockTags.MAZESTONE, TFBlockTags.DEADROCK);
-
-		this.tag(BlockTags.MUSHROOM_GROW_BLOCK).add(TFBlocks.UBEROUS_SOIL.get());
 
 		this.tag(BlockTags.MOSS_REPLACEABLE).add(TFBlocks.ROOT_BLOCK.get(), TFBlocks.LIVEROOT_BLOCK.get(), TFBlocks.TROLLSTEINN.get());
 

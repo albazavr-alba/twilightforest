@@ -20,66 +20,67 @@ import java.util.concurrent.CompletableFuture;
 public class ItemTagGenerator extends ModdedItemTagGenerator {
 
 	public ItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagsProvider.TagLookup<Block>> provider) {
-		super(output, future, provider);
+		super(output, future);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		super.addTags(provider);
-		this.copy(TFBlockTags.TWILIGHT_OAK_LOGS, TFItemTags.TWILIGHT_OAK_LOGS);
-		this.copy(TFBlockTags.CANOPY_LOGS, TFItemTags.CANOPY_LOGS);
-		this.copy(TFBlockTags.MANGROVE_LOGS, TFItemTags.MANGROVE_LOGS);
-		this.copy(TFBlockTags.DARKWOOD_LOGS, TFItemTags.DARKWOOD_LOGS);
-		this.copy(TFBlockTags.TIME_LOGS, TFItemTags.TIME_LOGS);
-		this.copy(TFBlockTags.TRANSFORMATION_LOGS, TFItemTags.TRANSFORMATION_LOGS);
-		this.copy(TFBlockTags.MINING_LOGS, TFItemTags.MINING_LOGS);
-		this.copy(TFBlockTags.SORTING_LOGS, TFItemTags.SORTING_LOGS);
+		this.getOrCreateRawBuilder(TFItemTags.TWILIGHT_OAK_LOGS).addTag(TFBlockTags.TWILIGHT_OAK_LOGS.location());
+		this.getOrCreateRawBuilder(TFItemTags.TWILIGHT_OAK_LOGS).addTag(TFBlockTags.TWILIGHT_OAK_LOGS.location());
+		this.getOrCreateRawBuilder(TFItemTags.CANOPY_LOGS).addTag(TFBlockTags.CANOPY_LOGS.location());
+		this.getOrCreateRawBuilder(TFItemTags.MANGROVE_LOGS).addTag(TFBlockTags.MANGROVE_LOGS.location());
+		this.getOrCreateRawBuilder(TFItemTags.DARKWOOD_LOGS).addTag(TFBlockTags.DARKWOOD_LOGS.location());
+		this.getOrCreateRawBuilder(TFItemTags.TIME_LOGS).addTag(TFBlockTags.TIME_LOGS.location());
+		this.getOrCreateRawBuilder(TFItemTags.TRANSFORMATION_LOGS).addTag(TFBlockTags.TRANSFORMATION_LOGS.location());
+		this.getOrCreateRawBuilder(TFItemTags.MINING_LOGS).addTag(TFBlockTags.MINING_LOGS.location());
+		this.getOrCreateRawBuilder(TFItemTags.SORTING_LOGS).addTag(TFBlockTags.SORTING_LOGS.location());
 
-		this.copy(TFBlockTags.TF_LOGS, TFItemTags.TWILIGHT_LOGS);
+		this.getOrCreateRawBuilder(TFItemTags.TWILIGHT_LOGS).addTag(TFBlockTags.TF_LOGS.location());
 		this.tag(ItemTags.LOGS).addTag(TFItemTags.TWILIGHT_LOGS);
 		this.tag(ItemTags.LOGS_THAT_BURN)
 			.addTag(TFItemTags.TWILIGHT_OAK_LOGS).addTag(TFItemTags.CANOPY_LOGS).addTag(TFItemTags.MANGROVE_LOGS)
 			.addTag(TFItemTags.TIME_LOGS).addTag(TFItemTags.TRANSFORMATION_LOGS).addTag(TFItemTags.MINING_LOGS).addTag(TFItemTags.SORTING_LOGS);
 
-		this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
-		this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
+		this.getOrCreateRawBuilder(ItemTags.SAPLINGS).addTag(BlockTags.SAPLINGS.location());
+		this.getOrCreateRawBuilder(ItemTags.LEAVES).addTag(BlockTags.LEAVES.location());
 
-		this.copy(BlockTags.PLANKS, ItemTags.PLANKS);
+		this.getOrCreateRawBuilder(ItemTags.PLANKS).addTag(BlockTags.PLANKS.location());
 
-		this.copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
-		this.copy(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
-		this.copy(Tags.Blocks.FENCE_GATES_WOODEN, Tags.Items.FENCE_GATES_WOODEN);
+		this.getOrCreateRawBuilder(ItemTags.WOODEN_FENCES).addTag(BlockTags.WOODEN_FENCES.location());
+		this.getOrCreateRawBuilder(ItemTags.FENCE_GATES).addTag(BlockTags.FENCE_GATES.location());
+		this.getOrCreateRawBuilder(Tags.Items.FENCE_GATES_WOODEN).addTag(Tags.Blocks.FENCE_GATES_WOODEN.location());
 
-		this.copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
-		this.copy(BlockTags.SLABS, ItemTags.SLABS);
-		this.copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
-		this.copy(BlockTags.STAIRS, ItemTags.STAIRS);
+		this.getOrCreateRawBuilder(ItemTags.WOODEN_SLABS).addTag(BlockTags.WOODEN_SLABS.location());
+		this.getOrCreateRawBuilder(ItemTags.SLABS).addTag(BlockTags.SLABS.location());
+		this.getOrCreateRawBuilder(ItemTags.WOODEN_STAIRS).addTag(BlockTags.WOODEN_STAIRS.location());
+		this.getOrCreateRawBuilder(ItemTags.STAIRS).addTag(BlockTags.STAIRS.location());
 
-		this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
-		this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
+		this.getOrCreateRawBuilder(ItemTags.WOODEN_BUTTONS).addTag(BlockTags.WOODEN_BUTTONS.location());
+		this.getOrCreateRawBuilder(ItemTags.WOODEN_PRESSURE_PLATES).addTag(BlockTags.WOODEN_PRESSURE_PLATES.location());
 
-		this.copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
-		this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
-		this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
-		this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
+		this.getOrCreateRawBuilder(ItemTags.WOODEN_TRAPDOORS).addTag(BlockTags.WOODEN_TRAPDOORS.location());
+		this.getOrCreateRawBuilder(ItemTags.WOODEN_DOORS).addTag(BlockTags.WOODEN_DOORS.location());
+		this.getOrCreateRawBuilder(ItemTags.HANGING_SIGNS).addTag(BlockTags.CEILING_HANGING_SIGNS.location());
+		this.getOrCreateRawBuilder(ItemTags.SIGNS).addTag(BlockTags.STANDING_SIGNS.location());
 
-		this.copy(Tags.Blocks.CHESTS_WOODEN, Tags.Items.CHESTS_WOODEN);
+		this.getOrCreateRawBuilder(Tags.Items.CHESTS_WOODEN).addTag(Tags.Blocks.CHESTS_WOODEN.location());
 
-		this.copy(TFBlockTags.STORAGE_BLOCKS_ARCTIC_FUR, TFItemTags.STORAGE_BLOCKS_ARCTIC_FUR);
-		this.copy(TFBlockTags.STORAGE_BLOCKS_CARMINITE, TFItemTags.STORAGE_BLOCKS_CARMINITE);
-		this.copy(TFBlockTags.STORAGE_BLOCKS_FIERY, TFItemTags.STORAGE_BLOCKS_FIERY);
-		this.copy(TFBlockTags.STORAGE_BLOCKS_IRONWOOD, TFItemTags.STORAGE_BLOCKS_IRONWOOD);
-		this.copy(TFBlockTags.STORAGE_BLOCKS_KNIGHTMETAL, TFItemTags.STORAGE_BLOCKS_KNIGHTMETAL);
-		this.copy(TFBlockTags.STORAGE_BLOCKS_STEELEAF, TFItemTags.STORAGE_BLOCKS_STEELEAF);
+		this.getOrCreateRawBuilder(TFItemTags.STORAGE_BLOCKS_ARCTIC_FUR).addTag(TFBlockTags.STORAGE_BLOCKS_ARCTIC_FUR.location());
+		this.getOrCreateRawBuilder(TFItemTags.STORAGE_BLOCKS_CARMINITE).addTag(TFBlockTags.STORAGE_BLOCKS_CARMINITE.location());
+		this.getOrCreateRawBuilder(TFItemTags.STORAGE_BLOCKS_FIERY).addTag(TFBlockTags.STORAGE_BLOCKS_FIERY.location());
+		this.getOrCreateRawBuilder(TFItemTags.STORAGE_BLOCKS_IRONWOOD).addTag(TFBlockTags.STORAGE_BLOCKS_IRONWOOD.location());
+		this.getOrCreateRawBuilder(TFItemTags.STORAGE_BLOCKS_KNIGHTMETAL).addTag(TFBlockTags.STORAGE_BLOCKS_KNIGHTMETAL.location());
+		this.getOrCreateRawBuilder(TFItemTags.STORAGE_BLOCKS_STEELEAF).addTag(TFBlockTags.STORAGE_BLOCKS_STEELEAF.location());
 
 		this.tag(Tags.Items.STORAGE_BLOCKS)
 			.addTag(TFItemTags.STORAGE_BLOCKS_FIERY).addTag(TFItemTags.STORAGE_BLOCKS_ARCTIC_FUR)
 			.addTag(TFItemTags.STORAGE_BLOCKS_CARMINITE).addTag(TFItemTags.STORAGE_BLOCKS_IRONWOOD)
 			.addTag(TFItemTags.STORAGE_BLOCKS_KNIGHTMETAL).addTag(TFItemTags.STORAGE_BLOCKS_STEELEAF);
 
-		this.copy(TFBlockTags.TOWERWOOD, TFItemTags.TOWERWOOD);
-		this.copy(TFBlockTags.BANISTERS, TFItemTags.BANISTERS);
+		this.getOrCreateRawBuilder(TFItemTags.TOWERWOOD).addTag(TFBlockTags.TOWERWOOD.location());
+		this.getOrCreateRawBuilder(TFItemTags.BANISTERS).addTag(TFBlockTags.BANISTERS.location());
 
 		this.tag(TFItemTags.PAPER).add(Items.PAPER);
 		this.tag(Tags.Items.FEATHERS).add(TFItems.RAVEN_FEATHER.get());
@@ -312,8 +313,6 @@ public class ItemTagGenerator extends ModdedItemTagGenerator {
 			TFItems.ARCTIC_BOOTS.get(),
 			TFItems.YETI_BOOTS.get(),
 			TFItems.FIERY_BOOTS.get());
-
-		this.tag(ItemTags.DYEABLE).add(TFItems.ARCTIC_HELMET.get(), TFItems.ARCTIC_CHESTPLATE.get(), TFItems.ARCTIC_LEGGINGS.get(), TFItems.ARCTIC_BOOTS.get());
 
 		this.tag(TFItemTags.BLOCK_AND_CHAIN_ENCHANTABLE).add(TFItems.BLOCK_AND_CHAIN.get());
 		this.tag(ItemTags.BOW_ENCHANTABLE).add(TFItems.TRIPLE_BOW.get(), TFItems.SEEKER_BOW.get(), TFItems.ICE_BOW.get(), TFItems.ENDER_BOW.get());

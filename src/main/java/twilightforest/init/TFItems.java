@@ -15,6 +15,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.enchantment.Repairable;
@@ -142,6 +143,7 @@ public class TFItems {
 	public static final DeferredItem<Item> CICADA_JAR = register("cicada_jar", properties -> new JarItem(TFBlocks.CICADA_JAR.get(), properties), () -> new Item.Properties().useBlockDescriptionPrefix());
 	public static final DeferredItem<Item> ARMOR_SHARD = register("armor_shard", Item::new, Item.Properties::new);
 	public static final DeferredItem<Item> ARMOR_SHARD_CLUSTER = register("armor_shard_cluster", Item::new, Item.Properties::new);
+	public static final DeferredItem<Item> TROLLSTEINN = register("trollsteinn", (properties) -> new BlockItem(TFBlocks.TROLLSTEINN.get(), properties), Item.Properties::new);
 	public static final DeferredItem<Item> KNIGHTMETAL_INGOT = register("knightmetal_ingot", Item::new, Item.Properties::new);
 	public static final DeferredItem<Item> KNIGHTMETAL_HELMET = register("knightmetal_helmet", Item::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.HELMET));
 	public static final DeferredItem<Item> KNIGHTMETAL_CHESTPLATE = register("knightmetal_chestplate", Item::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.KNIGHTMETAL, ArmorType.CHESTPLATE));
@@ -172,10 +174,20 @@ public class TFItems {
 	public static final DeferredItem<Item> PHANTOM_CHESTPLATE = register("phantom_chestplate", PhantomArmorItem::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.PHANTOM, ArmorType.CHESTPLATE).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> ICE_BOMB = register("ice_bomb", IceBombItem::new, () -> new Item.Properties().stacksTo(16));
 	public static final DeferredItem<Item> ARCTIC_FUR = register("arctic_fur", Item::new, Item.Properties::new);
-	public static final DeferredItem<Item> ARCTIC_HELMET = register("arctic_helmet", ArcticArmorItem::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.ARCTIC, ArmorType.HELMET));
-	public static final DeferredItem<Item> ARCTIC_CHESTPLATE = register("arctic_chestplate", ArcticArmorItem::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.ARCTIC, ArmorType.CHESTPLATE));
-	public static final DeferredItem<Item> ARCTIC_LEGGINGS = register("arctic_leggings", ArcticArmorItem::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.ARCTIC, ArmorType.LEGGINGS));
-	public static final DeferredItem<Item> ARCTIC_BOOTS = register("arctic_boots", ArcticArmorItem::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.ARCTIC, ArmorType.BOOTS));
+
+	public static final DeferredItem<Item> ARCTIC_HELMET = register("arctic_helmet", ArcticArmorItem::new, () -> new Item.Properties()
+		.humanoidArmor(TFArmorMaterials.ARCTIC, ArmorType.HELMET)
+		.component(DataComponents.DYED_COLOR, new DyedItemColor(0xFFFFFF)));
+	public static final DeferredItem<Item> ARCTIC_CHESTPLATE = register("arctic_chestplate", ArcticArmorItem::new, () -> new Item.Properties()
+		.humanoidArmor(TFArmorMaterials.ARCTIC, ArmorType.CHESTPLATE)
+		.component(DataComponents.DYED_COLOR, new DyedItemColor(0xFFFFFF)));
+	public static final DeferredItem<Item> ARCTIC_LEGGINGS = register("arctic_leggings", ArcticArmorItem::new, () -> new Item.Properties()
+		.humanoidArmor(TFArmorMaterials.ARCTIC, ArmorType.LEGGINGS)
+		.component(DataComponents.DYED_COLOR, new DyedItemColor(0xFFFFFF)));
+	public static final DeferredItem<Item> ARCTIC_BOOTS = register("arctic_boots", ArcticArmorItem::new, () -> new Item.Properties()
+		.humanoidArmor(TFArmorMaterials.ARCTIC, ArmorType.BOOTS)
+		.component(DataComponents.DYED_COLOR, new DyedItemColor(0xFFFFFF)));
+
 	public static final DeferredItem<Item> ALPHA_YETI_FUR = register("alpha_yeti_fur", Item::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> YETI_HELMET = register("yeti_helmet", YetiArmorItem::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.YETI, ArmorType.HELMET).rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> YETI_CHESTPLATE = register("yeti_chestplate", YetiArmorItem::new, () -> new Item.Properties().humanoidArmor(TFArmorMaterials.YETI, ArmorType.CHESTPLATE).rarity(Rarity.UNCOMMON));

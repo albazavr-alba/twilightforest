@@ -4,13 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -704,7 +702,9 @@ public class TFBlocks {
 
 	public static BlockBehaviour.Properties copyAndScaleProperties(BlockBehaviour blockBehaviour, float scale) {
 		BlockBehaviour.Properties properties = BlockBehaviour.Properties.ofFullCopy(blockBehaviour);
-		return properties.destroyTime(blockBehaviour.defaultDestroyTime() * scale).explosionResistance(properties.explosionResistance * scale);
+		float baseDestroyTime = blockBehaviour.defaultDestroyTime();
+		float scaledResistance = baseDestroyTime < 0 ? -1.0F : baseDestroyTime * scale * 5.0F;
+		return properties.destroyTime(blockBehaviour.defaultDestroyTime() * scale).explosionResistance(scaledResistance);
 	}
 
 	private static boolean noSpawning(BlockState pState, BlockGetter pLevel, BlockPos pPos, EntityType<?> pValue) {

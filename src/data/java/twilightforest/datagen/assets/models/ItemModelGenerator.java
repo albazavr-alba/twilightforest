@@ -21,6 +21,7 @@ import net.minecraft.world.item.Items;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.model.item.TravellersGearItemModel;
 import twilightforest.client.properties.*;
+import twilightforest.client.renderer.block.JarRenderer;
 import twilightforest.client.renderer.special.*;
 import twilightforest.datagen.helpers.ItemModelBuilders;
 import twilightforest.init.*;
@@ -31,7 +32,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ItemModelGenerator extends ItemModelBuilders {
-
 	public ItemModelGenerator(ItemModelOutput output, BiConsumer<Identifier, ModelInstance> modelOutput) {
 		super(output, modelOutput);
 	}
@@ -266,6 +266,8 @@ public class ItemModelGenerator extends ItemModelBuilders {
 		this.generateFlatItem(TFItems.TANNED_LEATHER.get(), ModelTemplates.FLAT_ITEM);
 		this.itemModelOutput.accept(TFItems.STALE_BREAD.get(), ItemModelUtils.plainModel(ModelTemplates.FLAT_HANDHELD_ITEM.create(TFItems.STALE_BREAD.get(), TextureMapping.layer0(Items.BREAD), this.modelOutput)));
 
+		this.generateTrollsteinn(TFItems.TROLLSTEINN.get());
+
 		this.generateTravellersGear(TFItems.TRAVELLERS_GOGGLES.get(), TwilightForestMod.prefix("travellers_modifiers/goggles"));
 		this.generateLayeredTravellersGear(TFItems.TRAVELLERS_VEST.get(), TFItems.TRAVELLERS_GLOVES.get(), new HasComponent(TFDataComponents.TRAVELLERS_HAS_GLOVES.get(), true), TwilightForestMod.prefix("travellers_modifiers/vest"));
 		this.generateTravellersGear(TFItems.TRAVELLERS_WINGS.get(), TwilightForestMod.prefix("travellers_modifiers/wings"));
@@ -325,6 +327,17 @@ public class ItemModelGenerator extends ItemModelBuilders {
 		this.generateSpawnEgg("yeti", 0xDEDEDE, 0x4675BB);
 
 		this.generateLayeredItem(TwilightForestMod.prefix("item/shield"), new Material(TwilightForestMod.prefix("item/lich_shield_frame")), new Material(TwilightForestMod.prefix("item/lich_shield_fill")));
+
+		this.createFlatItemModel(Items.AIR, "item/trophy", ModelTemplates.FLAT_ITEM);
+		this.createFlatItemModel(Items.AIR, "item/trophy_minor", ModelTemplates.FLAT_ITEM);
+		this.createFlatItemModel(Items.AIR, "item/trophy_quest", ModelTemplates.FLAT_ITEM);
+
+		for (JarRenderer.LidResource lid : JarRenderer.LID_LOCATION_LIST.get()) {
+			String name = lid.identifier().getPath();
+			if (lid.customPath() != null) name = lid.customPath();
+
+			this.createFlatItemModel(Items.AIR, "block/lid/" + name, ModelTemplates.FLAT_ITEM);
+		}
 	}
 
 	private void generateSpawnEgg(String entityName, int primary, int secondary) {
@@ -457,5 +470,23 @@ public class ItemModelGenerator extends ItemModelBuilders {
 			baseOverlay);
 		this.itemModelOutput.accept(overlay, baseOverlay);
 		this.itemModelOutput.accept(item, ItemModelUtils.conditional(property, ItemModelUtils.composite(gearModel, overlayModel), gearModel));
+	}
+
+	public void generateTrollsteinn(Item trollsteinnItem) {
+		ItemModel.Unbaked baseModel = ItemModelUtils.plainModel(
+			this.createFlatItemModel(trollsteinnItem, ModelTemplates.FLAT_ITEM)
+		);
+		ItemModel.Unbaked litModel = ItemModelUtils.plainModel(
+			this.createFlatItemModel(trollsteinnItem, "_light", ModelTemplates.FLAT_ITEM)
+		);
+		UseDuration fakeProperty = new UseDuration(false);
+		this.itemModelOutput.accept(trollsteinnItem,
+			ItemModelUtils.rangeSelect(
+				fakeProperty,
+				15.0F,
+				baseModel,
+				ItemModelUtils.override(litModel, 15.0F)
+			)
+		);
 	}
 }
