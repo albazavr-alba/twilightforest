@@ -1,7 +1,6 @@
 package twilightforest.client.model.block.carpet;
 
 import com.mojang.blaze3d.platform.Transparency;
-import com.mojang.math.Transformation;
 import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
@@ -14,14 +13,10 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.Identifier;
 import org.joml.Vector3f;
 import twilightforest.client.model.block.connected.ConnectionLogic;
 
 import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 //for now, im keeping this hardcoded to a 2 layer block, with the overlay layer being fullbright and tinted.
 //It might be worth expanding this in the future to be more flexible for other kinds of blocks (1 layer blocks, determining emissivity and tinting per layer, maybe >2 layer blocks?) but for now, I see no point.
@@ -172,7 +167,6 @@ public class UnbakedRoyalRagsModel implements UnbakedGeometry, UnbakedModel {
 			true
 		);
 
-		// 6. Собираем и возвращаем современный BakedQuad
 		return new BakedQuad(p0, p1, p2, p3, uv0, uv1, uv2, uv3, direction, materialInfo);
 	}
 }
