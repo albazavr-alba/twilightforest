@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
-import twilightforest.item.MagicMapItem;
 import twilightforest.item.mapdata.TFMagicMapData;
 
 import java.util.List;
@@ -41,11 +40,10 @@ public record MagicMapPacket(ClientboundMapItemDataPacket inner, List<String> co
 					Level level = ctx.player().level();
 					// [VanillaCopy] ClientPacketListener#handleMapItemData with our own mapdatas
 					MapRenderer mapitemrenderer = Minecraft.getInstance().getMapRenderer();
-					String s = MagicMapItem.getMapName(message.inner.mapId().id());
-					TFMagicMapData mapdata = TFMagicMapData.getMagicMapData(level, s);
+					TFMagicMapData mapdata = TFMagicMapData.getMagicMapData(level, message.inner.mapId());
 					if (mapdata == null) {
 						mapdata = new TFMagicMapData(0, 0, message.inner.scale(), false, false, message.inner.locked(), level.dimension());
-						TFMagicMapData.registerMagicMapData(level, mapdata, s);
+						TFMagicMapData.registerMagicMapData(level, mapdata, message.inner.mapId());
 					}
 
 					message.inner.applyToMap(mapdata);

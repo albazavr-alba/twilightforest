@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
-import twilightforest.item.MazeMapItem;
 import twilightforest.item.mapdata.TFMazeMapData;
 
 // Rewraps vanilla ClientboundMapItemDataPacket to properly add our own data
@@ -42,11 +41,10 @@ public record MazeMapPacket(ClientboundMapItemDataPacket inner, boolean ore, int
 					Level level = ctx.player().level();
 					// [VanillaCopy] ClientPlayNetHandler#handleMaps with our own mapdatas
 					MapRenderer mapitemrenderer = Minecraft.getInstance().getMapRenderer();
-					String s = MazeMapItem.getMapName(message.inner().mapId().id());
-					TFMazeMapData mapdata = TFMazeMapData.getMazeMapData(level, s);
+					TFMazeMapData mapdata = TFMazeMapData.getMazeMapData(level, message.inner().mapId());
 					if (mapdata == null) {
 						mapdata = new TFMazeMapData(0, 0, message.inner().scale(), false, false, message.inner().locked(), level.dimension());
-						TFMazeMapData.registerMazeMapData(level, mapdata, s);
+						TFMazeMapData.registerMazeMapData(level, mapdata, message.inner().mapId());
 					}
 
 					mapdata.ore = message.ore();
