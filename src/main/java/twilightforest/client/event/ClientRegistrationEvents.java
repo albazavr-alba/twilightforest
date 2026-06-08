@@ -165,7 +165,7 @@ public class ClientRegistrationEvents {
 	}
 
 	private void registerClientReloadListeners(AddClientReloadListenersEvent event) {
-		event.addListener(TwilightForestMod.prefix("texture_generator"), TextureGeneratorReloadListener.INSTANCE);
+//		event.addListener(TwilightForestMod.prefix("texture_generator"), TextureGeneratorReloadListener.INSTANCE);
 		event.addListener(TwilightForestMod.prefix("armor_cache"), new TFArmorRenderer.ResourceReloadListener());
 	}
 
