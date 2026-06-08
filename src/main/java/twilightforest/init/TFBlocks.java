@@ -259,7 +259,7 @@ public class TFBlocks {
 
 	//mini structures
 	public static final DeferredBlock<Block> TWILIGHT_PORTAL_MINIATURE_STRUCTURE = registerWithItem("twilight_portal_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.of().noCollision().noOcclusion().requiresCorrectToolForDrops().strength(0.75F));
-	//	public static final DeferredBlock<Block> HEDGE_MAZE_MINIATURE_STRUCTURE = register("hedge_maze_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
+//		public static final DeferredBlock<Block> HEDGE_MAZE_MINIATURE_STRUCTURE = register("hedge_maze_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
 //	public static final DeferredBlock<Block> HOLLOW_HILL_MINIATURE_STRUCTURE = register("hollow_hill_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
 //	public static final DeferredBlock<Block> QUEST_GROVE_MINIATURE_STRUCTURE = register("quest_grove_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));
 //	public static final DeferredBlock<Block> MUSHROOM_TOWER_MINIATURE_STRUCTURE = register("mushroom_tower_miniature_structure", MiniatureStructureBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get()));

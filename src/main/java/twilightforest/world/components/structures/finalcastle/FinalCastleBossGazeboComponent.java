@@ -2,9 +2,11 @@ package twilightforest.world.components.structures.finalcastle;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.FrontAndTop;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
@@ -14,19 +16,24 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
 import tamaized.beanification.Autowired;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.world.components.structures.TFStructureComponentOld;
-import twilightforest.world.components.structures.TwilightJigsawPiece;
 import twilightforest.world.components.structures.util.StructureTemplateDefinitions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -58,12 +65,21 @@ public class FinalCastleBossGazeboComponent extends TFStructureComponentOld {
 	public void addChildren(StructurePiece parent, StructurePieceAccessor list, RandomSource rand) {
 		this.deco = new StructureTFDecoratorCastle();
 		this.deco.blockState = TFBlocks.VIOLET_CASTLE_RUNE_BRICK.get().defaultBlockState();
-
 		this.deco.fenceState = TFBlocks.VIOLET_FORCE_FIELD.get().defaultBlockState();
 
-		TwilightJigsawPiece templatePiece = structureTemplateDefinitions.initializeTemplateFromPool(GAZEBO_TEMP_POOL, this.getWorldPos(10, -1, 10), this.rotation.rotation().rotate(FrontAndTop.UP_SOUTH), "twilightforest:final_castle/final_boss", rand, this.genDepth + 1, ServerLifecycleHooks.getCurrentServer().getStructureManager());
-		if (templatePiece != null) {
-			list.addPiece(templatePiece);
+		StructureTemplateManager templateManager = ServerLifecycleHooks.getCurrentServer().getStructureManager();
+
+		HolderLookup.Provider registries = ServerLifecycleHooks.getCurrentServer().registryAccess();
+
+		StructureTemplatePool templatePool = registries.lookupOrThrow(Registries.TEMPLATE_POOL).getOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL, GAZEBO_TEMP_POOL)).value();
+
+		StructurePoolElement poolElement = templatePool.getRandomTemplate(rand);
+
+		if (poolElement != null) {
+			BlockPos spawnPos = this.getWorldPos(10, -1, 10);
+
+			PoolElementStructurePiece piece = new PoolElementStructurePiece(templateManager, poolElement, spawnPos, poolElement.getGroundLevelDelta(), this.rotation, poolElement.getBoundingBox(templateManager, spawnPos, this.rotation), JigsawStructure.DEFAULT_LIQUID_SETTINGS);
+			list.addPiece(piece);
 		}
 	}
 
@@ -99,7 +115,7 @@ public class FinalCastleBossGazeboComponent extends TFStructureComponentOld {
 		// setInvisibleTextEntity(world, 10, 0, 10, sbb, "You can join the Twilight Forest Discord server to follow",true, 1.0f);
 		// setInvisibleTextEntity(world, 10, 0, 10, sbb, "the latest updates on this castle and other content at:",true, 0.7f);
 
-		ImmutableList.Builder<Vec3> positionAccumulator = ImmutableList.builder();
+		ImmutableList.Builder<@NotNull Vec3> positionAccumulator = ImmutableList.builder();
 
 		// Places Display Text entities, configured to only rotate-sync with camera (billboarding) except with locked vertical angle: It will only rotate sideways.
 		this.setInvisibleTextEntity(world, 10, 0, 10, sbb, "Final Castle WIP.", true, 2.3f, positionAccumulator::add, Display.BillboardConstraints.VERTICAL);
