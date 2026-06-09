@@ -277,7 +277,7 @@ public class UncraftingMenu extends RecipeBookMenu {
 	}
 
 	public static boolean isIngredientProblematic(ItemStack ingredient) {
-		return (!ingredient.isEmpty() && !ingredient.getItem().getCraftingRemainder(ingredient).is(Items.AIR)) || ingredient.is(Items.BARRIER);
+		return (!ingredient.isEmpty() && ingredient.getItem().getCraftingRemainder(ingredient) != null) || ingredient.is(Items.BARRIER);
 	}
 
 	private static ItemStack normalizeIngredient(ItemStack ingredient) {

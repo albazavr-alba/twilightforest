@@ -28,7 +28,7 @@ public class EmperorsClothRecipe extends CustomRecipe {
 					foundCloth = true;
 				} else if (!foundItem) {
 					if (stack.is(TFItemTags.EMPERORS_CLOTH_APPLICABLE)
-						&& stack.getCraftingRemainder().is(ItemStack.EMPTY.getItem())
+						&& stack.getCraftingRemainder() == null
 						&& stack.get(TFDataComponents.EMPERORS_CLOTH) == null) {
 						foundItem = true;
 					} else {
