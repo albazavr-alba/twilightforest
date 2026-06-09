@@ -1,5 +1,6 @@
 package twilightforest.util.landmarks;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -127,6 +128,10 @@ public final class LandmarkUtil {
 
 	public static boolean isProgressionEnforced(ServerLevel level) {
 		return level.getGameRules().get(TFGameRules.ENFORCED_PROGRESSION_RULE.get());
+	}
+
+	public static boolean isProgressionEnforced(ClientLevel level) {
+		return level.getServer().getGameRules().get(TFGameRules.ENFORCED_PROGRESSION_RULE.get());
 	}
 
 	private LandmarkUtil() {
