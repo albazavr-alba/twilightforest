@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.TFRegistries;
 
 import javax.annotation.Nullable;
@@ -27,7 +28,7 @@ import java.util.Optional;
  * @param advancements     List of advancements that are required to make a biome no longer restricted
  */
 
-public record Restriction(@Nullable ResourceKey<Structure> hintStructureKey, ResourceKey<Enforcement> enforcement,
+public record Restriction(@Nullable ResourceKey<@NotNull Structure> hintStructureKey, ResourceKey<@NotNull Enforcement> enforcement,
 						  float multiplier, @Nullable ItemStack lockedBiomeToast, List<Identifier> advancements) {
 
 	public static final Codec<Restriction> CODEC = RecordCodecBuilder.create((recordCodecBuilder) -> recordCodecBuilder.group(
@@ -39,7 +40,7 @@ public record Restriction(@Nullable ResourceKey<Structure> hintStructureKey, Res
 	).apply(recordCodecBuilder, Restriction::create));
 
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType") // Vanilla does this too
-	private static Restriction create(Optional<ResourceKey<Structure>> hintStructureKey, ResourceKey<Enforcement> enforcer, float multiplier, Optional<ItemStack> lockedBiomeToast, List<Identifier> advancements) {
+	private static Restriction create(Optional<ResourceKey<@NotNull Structure>> hintStructureKey, ResourceKey<@NotNull Enforcement> enforcer, float multiplier, Optional<ItemStack> lockedBiomeToast, List<Identifier> advancements) {
 		return new Restriction(hintStructureKey.orElse(null), enforcer, multiplier, lockedBiomeToast.orElse(null), advancements);
 	}
 
@@ -52,11 +53,11 @@ public record Restriction(@Nullable ResourceKey<Structure> hintStructureKey, Res
 		if (biomeLocation == null)
 			return Optional.empty();
 
-		Optional<Registry<Restriction>> restrictionsRegistry = access.lookup(TFRegistries.Keys.RESTRICTIONS);
+		Optional<Registry<@NotNull Restriction>> restrictionsRegistry = access.lookup(TFRegistries.Keys.RESTRICTIONS);
 		if (restrictionsRegistry.isEmpty())
 			return Optional.empty();
 
-		Restriction restrictions = restrictionsRegistry.get().get(biomeLocation);
+		Restriction restrictions = restrictionsRegistry.get().get(biomeLocation).get().value();
 		if (restrictions == null || PlayerHelper.doesPlayerHaveRequiredAdvancements(player, restrictions.advancements())) {
 			return Optional.empty();
 		}
