@@ -187,7 +187,7 @@ public class TravellersArmorItem extends Item implements TravellersModifiable {
 		@Nullable
 		@Override
 		public Identifier getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType type, EquipmentClientInfo.Layer layer, Identifier def) {
-			return type != EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS && entity.getData(TFDataAttachments.IS_USING_GOGGLES_ZOOM_MODIFIER) ?
+			return type != EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS ?
 				TwilightForestMod.prefix("textures/models/armor/travellers_layer_1_down.png") :
 				super.getArmorTexture(stack, type, layer, def);
 		}
@@ -236,7 +236,7 @@ public class TravellersArmorItem extends Item implements TravellersModifiable {
 		@Override
 		public void setupModelAnimations(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, Model model, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
 			if (model instanceof TravellersWingsModel wingsModel)
-				wingsModel.setupModelAnimations(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+				wingsModel.setupModelAnimations(livingEntity, ageInTicks);
 		}
 
 		private boolean isModelSlim(Model<?> model) {
