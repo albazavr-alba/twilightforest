@@ -4,7 +4,6 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.recipebook.GhostSlots;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
-import net.minecraft.client.gui.screens.recipebook.SlotSelectTime;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.context.ContextMap;
@@ -14,11 +13,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
-import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,11 +22,11 @@ import twilightforest.inventory.UncraftingPlaceRecipe;
 
 import java.util.List;
 
-public class UncraftingRecipeBookComponent extends RecipeBookComponent implements UncraftingPlaceRecipe<Ingredient> {
+public class UncraftingRecipeBookComponent extends RecipeBookComponent<@NotNull RecipeBookMenu> implements UncraftingPlaceRecipe<Ingredient> {
 	@Nullable
 	private GhostSlots currentGhostSlots = new GhostSlots(() -> 0);
 
-	public UncraftingRecipeBookComponent(RecipeBookMenu menu, List list) {
+	public UncraftingRecipeBookComponent(RecipeBookMenu menu, List<TabInfo> list) {
 		super(menu, list);
 	}
 
@@ -88,7 +84,7 @@ public class UncraftingRecipeBookComponent extends RecipeBookComponent implement
 		if (currentGhostSlots != null && !ingredient.isEmpty()) {
 			Slot targetSlot = this.menu.slots.get(slotIndex);
 
-			List<Holder<@NotNull Item>> items = ingredient.items().toList();
+			List<Holder<@NotNull Item>> items = ingredient.getValues().stream().toList();
 			if (!items.isEmpty()) {
 				Item item = items.getFirst().value();
 				ItemStack stack = new ItemStack(item);

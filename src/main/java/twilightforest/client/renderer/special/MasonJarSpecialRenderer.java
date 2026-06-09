@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.api.distmarker.Dist;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import tamaized.beanification.Autowired;
@@ -29,8 +30,7 @@ import twilightforest.init.TFDataComponents;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public record MasonJarSpecialRenderer(Optional<Item> defaultLid, ItemModelResolver resolver) implements SpecialModelRenderer<DataComponentMap> {
-
+public record MasonJarSpecialRenderer(Optional<Item> defaultLid, ItemModelResolver resolver) implements SpecialModelRenderer<@NotNull DataComponentMap> {
 	@Autowired(dist = Dist.CLIENT)
 	private static TFItemDisplayContextEnumExtension itemDisplayContextEnumExtension;
 
@@ -86,7 +86,7 @@ public record MasonJarSpecialRenderer(Optional<Item> defaultLid, ItemModelResolv
 		return stack.getComponents();
 	}
 
-	public record Unbaked(Optional<Item> defaultLid) implements SpecialModelRenderer.Unbaked {
+	public record Unbaked(Optional<Item> defaultLid) implements SpecialModelRenderer.Unbaked<@NotNull DataComponentMap> {
 		public static final MapCodec<MasonJarSpecialRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("default_lid").forGetter(MasonJarSpecialRenderer.Unbaked::defaultLid))
 			.apply(instance, MasonJarSpecialRenderer.Unbaked::new));
@@ -105,7 +105,7 @@ public record MasonJarSpecialRenderer(Optional<Item> defaultLid, ItemModelResolv
 		}
 
 		@Override
-		public SpecialModelRenderer<?> bake(BakingContext context) {
+		public SpecialModelRenderer<@NotNull DataComponentMap> bake(BakingContext bakingContext) {
 			return new MasonJarSpecialRenderer(this.defaultLid(), Minecraft.getInstance().getItemModelResolver());
 		}
 	}

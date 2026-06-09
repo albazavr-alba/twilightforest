@@ -53,11 +53,6 @@ public class UncraftingRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<ShapedRecipe> getSerializer() {
-		return (RecipeSerializer<ShapedRecipe>) TFRecipes.UNCRAFTING_SERIALIZER.get();
-	}
-
-	@Override
 	public RecipeType<CraftingRecipe> getType() {
 		return TFRecipes.UNCRAFTING_RECIPE.get();
 	}

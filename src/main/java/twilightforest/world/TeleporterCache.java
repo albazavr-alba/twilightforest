@@ -1,8 +1,9 @@
 package twilightforest.world;
 
 import com.google.common.collect.Maps;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.Identifier;
@@ -23,8 +24,8 @@ import java.util.Map;
 public class TeleporterCache extends SavedData {
 	private final Map<ResourceKey<@NotNull Level>, Map<ColumnPos, TFTeleporter.PortalPosition>> destinationCoordinateCache = new HashMap<>();
 
-	public static final com.mojang.serialization.Codec<TeleporterCache> CODEC =
-		net.minecraft.nbt.CompoundTag.CODEC.xmap(
+	public static final Codec<TeleporterCache> CODEC =
+		CompoundTag.CODEC.xmap(
 			nbt -> {
 				TeleporterCache cache = new TeleporterCache();
 				load(nbt);
@@ -53,15 +54,15 @@ public class TeleporterCache extends SavedData {
 		return storage.computeIfAbsent(TeleporterCache.factory());
 	}
 
-	public void addBlockToCache(ResourceKey<@NotNull Level> dimension, ColumnPos columnPos, TFTeleporter.PortalPosition position) {
+	void addBlockToCache(ResourceKey<@NotNull Level> dimension, ColumnPos columnPos, TFTeleporter.PortalPosition position) {
 		this.destinationCoordinateCache.putIfAbsent(dimension, Maps.newHashMapWithExpectedSize(4096));
 		this.destinationCoordinateCache.get(dimension).put(columnPos, position);
 		this.setDirty();
 	}
 
 	@Nullable
-	public TFTeleporter.PortalPosition getPortalPosition(Identifier dimension, ColumnPos pos) {
-		ResourceKey<@NotNull Registry<@NotNull Object>> levelKey = ResourceKey.createRegistryKey(dimension);
+	TFTeleporter.PortalPosition getPortalPosition(Identifier dimension, ColumnPos pos) {
+		ResourceKey<@NotNull Level> levelKey = ResourceKey.create(Registries.DIMENSION, dimension);
 
 		if (this.destinationCoordinateCache.containsKey(levelKey)) {
 			return this.destinationCoordinateCache.get(levelKey).get(pos);
@@ -71,7 +72,7 @@ public class TeleporterCache extends SavedData {
 
 
 	public void removeInvalidPos(Identifier dimension, ColumnPos pos) {
-		this.destinationCoordinateCache.get(dimension).remove(pos);
+		this.destinationCoordinateCache.get(ResourceKey.create(Registries.DIMENSION, dimension)).remove(pos);
 		this.setDirty();
 	}
 
@@ -107,9 +108,9 @@ public class TeleporterCache extends SavedData {
 		for (int i = 0; i < destList.size(); i++) {
 			CompoundTag dest = destList.getCompound(i).get();
 			Identifier name = Identifier.parse(dest.getString("name").get());
-			ResourceKey levelKey = ResourceKey.createRegistryKey(name);
+			ResourceKey<@NotNull Level> levelKey = ResourceKey.create(Registries.DIMENSION, name);
 
-			cache.destinationCoordinateCache.putIfAbsent(levelKey, com.google.common.collect.Maps.newHashMapWithExpectedSize(4096));
+			cache.destinationCoordinateCache.putIfAbsent(levelKey, Maps.newHashMapWithExpectedSize(4096));
 
 			ListTag linksList = dest.getList("links").get();
 

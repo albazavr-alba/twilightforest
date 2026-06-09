@@ -1,6 +1,5 @@
 package twilightforest.item.recipe.travellers;
 
-import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +11,6 @@ import twilightforest.item.travellers_gear.modifiers.TravellersModifiable;
 import twilightforest.item.travellers_gear.modifiers.TravellersModifier;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -69,9 +67,9 @@ public abstract class TravellersGearModifierRecipe extends CustomRecipe {
 	}
 
 	public static ItemStack getModifiableArmorFromIngredients(Iterable<Ingredient> ingredients) {
-		return (ItemStack) StreamSupport.stream(ingredients.spliterator(), false)
-			.flatMap(ingredient -> Arrays.stream(ingredient.getValues().stream().toArray()))
-			.filter(stack -> ((Holder<ItemStack>) stack).value().getItem() instanceof TravellersModifiable).findFirst().orElseThrow();
+		return new ItemStack(StreamSupport.stream(ingredients.spliterator(), false)
+			.flatMap(ingredient -> ingredient.getValues().stream())
+			.filter(stack -> (stack).value() instanceof TravellersModifiable).findFirst().orElseThrow().value());
 	}
 
 	public Identifier getId() {

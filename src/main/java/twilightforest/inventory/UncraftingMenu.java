@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -333,19 +334,19 @@ public class UncraftingMenu extends RecipeBookMenu {
 		return input.is(output.getItem()) && input.getCount() >= output.getCount();
 	}
 
-	private static RecipeHolder[] getRecipesFor(CraftingInput input, Level level) {
-		return level.getServer().getRecipeManager().recipeMap().getRecipesFor(RecipeType.CRAFTING, input, level).toList().toArray(new RecipeHolder[0]);
+	private static List<RecipeHolder<@NotNull CraftingRecipe>> getRecipesFor(CraftingInput input, Level level) {
+		return level.getServer().getRecipeManager().recipeMap().getRecipesFor(RecipeType.CRAFTING, input, level).toList();
 	}
 
 	private void chooseRecipe(CraftingInput input) {
-		RecipeHolder[] recipes = getRecipesFor(input, this.level);
+		List<RecipeHolder<@NotNull CraftingRecipe>> recipes = getRecipesFor(input, this.level);
 
-		if (recipes.length == 0) {
+		if (recipes.isEmpty()) {
 			this.tinkerResult.setItem(0, ItemStack.EMPTY);
 			return;
 		}
 
-		RecipeHolder recipe = recipes[Math.floorMod(this.recipeInCycle, recipes.length)];
+		RecipeHolder<@NotNull CraftingRecipe> recipe = recipes.get(Math.floorMod(this.recipeInCycle, recipes.size()));
 
 		if (recipe != null && (!this.level.getServer().getGameRules().get(GameRules.LIMITED_CRAFTING) || ((ServerPlayer) this.player).getRecipeBook().contains(recipe.id()))) {
 			this.tinkerResult.setRecipeUsed(recipe);
@@ -621,8 +622,8 @@ public class UncraftingMenu extends RecipeBookMenu {
 		ItemStack[] stacks = new ItemStack[recipe.placementInfo().ingredients().size()];
 
 		for (int i = 0; i < recipe.placementInfo().ingredients().size(); i++) {
-			ItemStack[] matchingStacks = Arrays.stream(recipe.placementInfo().ingredients().get(i).items().toArray(Holder[]::new)).filter(s -> !s.is(TFItemTags.BANNED_UNCRAFTING_INGREDIENTS)).toArray(ItemStack[]::new);
-			stacks[i] = matchingStacks.length > 0 ? matchingStacks[Math.floorMod(this.ingredientsInCycle, matchingStacks.length)] : ItemStack.EMPTY;
+			List<Holder<@NotNull Item>> matchingStacks = recipe.placementInfo().ingredients().get(i).items().filter(s -> !s.is(TFItemTags.BANNED_UNCRAFTING_INGREDIENTS)).toList();
+			stacks[i] = !matchingStacks.isEmpty() ? new ItemStack(matchingStacks.get(Math.floorMod(this.ingredientsInCycle, matchingStacks.size())).value()) : ItemStack.EMPTY;
 		}
 
 		return stacks;

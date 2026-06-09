@@ -19,6 +19,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.RecipeBookMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
@@ -34,7 +35,7 @@ import java.util.List;
 
 public class UncraftingScreen extends AbstractContainerScreen<@NotNull UncraftingMenu> implements RecipeUpdateListener {
 	private static final Identifier TEXTURE = TwilightForestMod.getGuiTexture("guigoblintinkering.png");
-	private final RecipeBookComponent recipeBookComponent = new UncraftingRecipeBookComponent(menu, List.of());
+	private final RecipeBookComponent<@NotNull RecipeBookMenu> recipeBookComponent = new UncraftingRecipeBookComponent(menu, List.of());
 	private boolean widthTooNarrow;
 
 	public UncraftingScreen(UncraftingMenu container, Inventory player, Component name) {
