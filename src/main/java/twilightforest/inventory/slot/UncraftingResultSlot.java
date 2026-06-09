@@ -6,11 +6,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.neoforged.neoforge.common.CommonHooks;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.inventory.UncraftingContainer;
 import twilightforest.inventory.UncraftingMenu;
 
@@ -42,8 +40,12 @@ public class UncraftingResultSlot extends ResultSlot {
 		//clear the temp map, just in case
 		this.tempRemainderMap.clear();
 
-		for (RecipeHolder<CraftingRecipe> recipe : player.level().getRecipeManager().getRecipesFor(RecipeType.CRAFTING, this.assemblyMatrix.asCraftInput(), this.player.level())) {
-			if (ItemStack.isSameItemSameComponents(recipe.value().getResultItem(player.level().registryAccess()), stack)) {
+		RecipeManager recipeManager = player.level().getServer().getRecipeManager();
+
+		for (RecipeHolder<@NotNull CraftingRecipe> recipe : recipeManager.recipeMap().byType(RecipeType.CRAFTING)) {
+			ItemStack resultStack = recipe.value().assemble(this.assemblyMatrix.asCraftInput());
+
+			if (ItemStack.isSameItemSameComponents(resultStack, stack)) {
 				combined = false;
 				break;
 			}
@@ -77,7 +79,14 @@ public class UncraftingResultSlot extends ResultSlot {
 		int i = positioned.left();
 		int j = positioned.top();
 		CommonHooks.setCraftingPlayer(player);
-		NonNullList<ItemStack> remainingItems = player.level().getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, input, player.level());
+		NonNullList<@NotNull ItemStack> remainingItems = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+		var matchingRecipes = recipeManager.recipeMap().getRecipesFor(RecipeType.CRAFTING, input, player.level());
+
+		if (!matchingRecipes.toList().isEmpty()) {
+			RecipeHolder<@NotNull CraftingRecipe> recipeHolder = matchingRecipes.toList().getFirst();
+			remainingItems = recipeHolder.value().getRemainingItems(input);
+		}
+
 		CommonHooks.setCraftingPlayer(null);
 
 		for (int k = 0; k < input.height(); k++) {
