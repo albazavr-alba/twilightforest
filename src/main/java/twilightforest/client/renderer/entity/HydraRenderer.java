@@ -8,13 +8,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
 import twilightforest.client.model.TFModelLayers;
 import twilightforest.client.model.entity.HydraModel;
 import twilightforest.client.state.entity.HydraRenderState;
 import twilightforest.entity.boss.Hydra;
 
-public class HydraRenderer extends MobRenderer<Hydra, HydraRenderState, HydraModel> {
+public class HydraRenderer extends MobRenderer<@NotNull Hydra, @NotNull HydraRenderState, @NotNull HydraModel> {
 
 	public static final Identifier TEXTURE = TwilightForestMod.getModelTexture("hydra4.png");
 
