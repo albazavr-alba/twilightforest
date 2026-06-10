@@ -89,8 +89,12 @@ public final class TwilightForestMod {
 
 		TFRemapper.addRegistryAliases();
 
-		bus.addListener(net.neoforged.neoforge.registries.NewRegistryEvent.class, TFRegistries::registerRegistries);
-
+		TFRegistries.BIOME_LAYER_TYPE_REG.register(bus);
+		TFRegistries.ENFORCEMENT_REG.register(bus);
+		TFRegistries.CHUNK_BLANKET_REG.register(bus);
+		TFRegistries.TEMPLATE_MARKER_HANDLER_REG.register(bus);
+		TFRegistries.ITEM_DISPLAY_REG.register(bus);
+		TFRegistries.TRAVELLERS_MODIFIER_REG.register(bus);
 
 //		if (ModList.get().isLoaded("curios")) loadCuriosCompat(bus);
 //		if (ModList.get().isLoaded("cosmeticarmorreworked")) NeoForge.EVENT_BUS.addListener(CosmeticArmorCompat::keepCosmeticArmor);

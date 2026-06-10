@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.entity.MagicPaintingVariant;
@@ -27,35 +28,19 @@ import twilightforest.world.components.structures.markerhandler.TemplateMarkerHa
 import java.util.Locale;
 
 public class TFRegistries {
-	public static Registry<@NotNull BiomeLayerType> BIOME_LAYER_TYPE;
-	public static Registry<@NotNull Enforcement> ENFORCEMENT;
-	public static Registry<@NotNull ChunkBlanketType> CHUNK_BLANKET_TYPES;
-	public static Registry<@NotNull TemplateMarkerHandlerType> TEMPLATE_MARKER_HANDLER_TYPES;
-	public static Registry<@NotNull ItemDisplayType> ITEM_DISPLAY_TYPE;
-	public static Registry<@NotNull MapCodec<? extends TravellersModifier>> TRAVELLERS_MODIFIER_TYPE;
+	public static final DeferredRegister<@NotNull BiomeLayerType> BIOME_LAYER_TYPE_REG = DeferredRegister.create(Keys.BIOME_LAYER_TYPE, TwilightForestMod.ID);
+	public static final DeferredRegister<@NotNull Enforcement> ENFORCEMENT_REG = DeferredRegister.create(Keys.ENFORCEMENT, TwilightForestMod.ID);
+	public static final DeferredRegister<@NotNull ChunkBlanketType> CHUNK_BLANKET_REG = DeferredRegister.create(Keys.CHUNK_BLANKET_TYPE, TwilightForestMod.ID);
+	public static final DeferredRegister<@NotNull TemplateMarkerHandlerType> TEMPLATE_MARKER_HANDLER_REG = DeferredRegister.create(Keys.TEMPLATE_MARKER_HANDLER_TYPE, TwilightForestMod.ID);
+	public static final DeferredRegister<@NotNull ItemDisplayType> ITEM_DISPLAY_REG = DeferredRegister.create(Keys.ITEM_DISPLAY_TYPE, TwilightForestMod.ID);
+	public static final DeferredRegister<@NotNull MapCodec<? extends TravellersModifier>> TRAVELLERS_MODIFIER_REG = DeferredRegister.create(Keys.TRAVELLERS_MODIFIER_TYPE, TwilightForestMod.ID);
 
-	public static void registerRegistries(net.neoforged.neoforge.registries.NewRegistryEvent event) {
-		RegistryBuilder<@NotNull BiomeLayerType> biomeLayerBuilder = new RegistryBuilder<>(Keys.BIOME_LAYER_TYPE);
-		RegistryBuilder<@NotNull Enforcement> enforcementBuilder = new RegistryBuilder<>(Keys.ENFORCEMENT).sync(true);
-		RegistryBuilder<@NotNull ChunkBlanketType> chunkBlanketBuilder = new RegistryBuilder<>(Keys.CHUNK_BLANKET_TYPE);
-		RegistryBuilder<@NotNull TemplateMarkerHandlerType> templateMarkerBuilder = new RegistryBuilder<>(Keys.TEMPLATE_MARKER_HANDLER_TYPE);
-		RegistryBuilder<@NotNull ItemDisplayType> itemDisplayBuilder = new RegistryBuilder<>(Keys.ITEM_DISPLAY_TYPE).sync(true);
-		RegistryBuilder<@NotNull MapCodec<? extends TravellersModifier>> modifierBuilder = new RegistryBuilder<>(Keys.TRAVELLERS_MODIFIER_TYPE).sync(true);
-
-		event.register(biomeLayerBuilder.create());
-		event.register(enforcementBuilder.create());
-		event.register(chunkBlanketBuilder.create());
-		event.register(templateMarkerBuilder.create());
-		event.register(itemDisplayBuilder.create());
-		event.register(modifierBuilder.create());
-
-		BIOME_LAYER_TYPE = biomeLayerBuilder.create();
-		ENFORCEMENT = enforcementBuilder.create();
-		CHUNK_BLANKET_TYPES = chunkBlanketBuilder.create();
-		TEMPLATE_MARKER_HANDLER_TYPES = templateMarkerBuilder.create();
-		ITEM_DISPLAY_TYPE = itemDisplayBuilder.create();
-		TRAVELLERS_MODIFIER_TYPE = modifierBuilder.create();
-	}
+	public static final Registry<@NotNull BiomeLayerType> BIOME_LAYER_TYPE = BIOME_LAYER_TYPE_REG.makeRegistry((_) -> new RegistryBuilder<>(Keys.BIOME_LAYER_TYPE));
+	public static final Registry<@NotNull Enforcement> ENFORCEMENT = ENFORCEMENT_REG.makeRegistry((_) -> new RegistryBuilder<>(Keys.ENFORCEMENT).sync(true));
+	public static final Registry<@NotNull ChunkBlanketType> CHUNK_BLANKET_TYPES = CHUNK_BLANKET_REG.makeRegistry((_) -> new RegistryBuilder<>(Keys.CHUNK_BLANKET_TYPE));
+	public static final Registry<@NotNull TemplateMarkerHandlerType> TEMPLATE_MARKER_HANDLER_TYPES = TEMPLATE_MARKER_HANDLER_REG.makeRegistry((_) -> new RegistryBuilder<>(Keys.TEMPLATE_MARKER_HANDLER_TYPE));
+	public static final Registry<@NotNull ItemDisplayType> ITEM_DISPLAY_TYPE = ITEM_DISPLAY_REG.makeRegistry((_) -> new RegistryBuilder<>(Keys.ITEM_DISPLAY_TYPE).sync(true));
+	public static final Registry<@NotNull MapCodec<? extends TravellersModifier>> TRAVELLERS_MODIFIER_TYPE = TRAVELLERS_MODIFIER_REG.makeRegistry((_) -> new RegistryBuilder<>(Keys.TRAVELLERS_MODIFIER_TYPE).sync(true));
 
 	public static final class Keys {
 		public static final String REGISTRY_NAMESPACE = "twilight";
