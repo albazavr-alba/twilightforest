@@ -89,6 +89,9 @@ public final class TwilightForestMod {
 
 		TFRemapper.addRegistryAliases();
 
+		bus.addListener(net.neoforged.neoforge.registries.NewRegistryEvent.class, TFRegistries::registerRegistries);
+
+
 //		if (ModList.get().isLoaded("curios")) loadCuriosCompat(bus);
 //		if (ModList.get().isLoaded("cosmeticarmorreworked")) NeoForge.EVENT_BUS.addListener(CosmeticArmorCompat::keepCosmeticArmor);
 	}
