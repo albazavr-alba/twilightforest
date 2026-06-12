@@ -9,6 +9,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.*;
@@ -25,7 +26,6 @@ import twilightforest.world.components.structures.util.LandmarkStructure;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 
 public class HedgeMazeStructure extends LandmarkStructure implements CustomDensitySource {
 	public static final MapCodec<HedgeMazeStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> landmarkCodec(instance).apply(instance, HedgeMazeStructure::new));
