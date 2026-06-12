@@ -477,7 +477,7 @@ public class TFAdvancementGenerator implements AdvancementSubProvider {
 			.save(consumer, "twilightforest:lich_scepters");
 
 		Advancement.Builder.advancement().parent(lich).display(
-				TFItems.BRITTLE_FLASK.get(),
+				ItemStackTemplate.fromNonEmptyStack(this.flaskWithHarming()),
 				Component.translatable("advancement.twilightforest.full_mettle_alchemist"),
 				Component.translatable("advancement.twilightforest.full_mettle_alchemist.desc"),
 				null, AdvancementType.CHALLENGE, true, true, true)
@@ -535,7 +535,7 @@ public class TFAdvancementGenerator implements AdvancementSubProvider {
 			.save(consumer, "twilightforest:experiment_115");
 
 		Advancement.Builder.advancement().parent(e115).display(
-				TFItems.EXPERIMENT_115.get(),
+				ItemStackTemplate.fromNonEmptyStack(e115Tag("think")),
 				Component.translatable("advancement.twilightforest.experiment_115_3"),
 				Component.translatable("advancement.twilightforest.experiment_115_3.desc"),
 				null, AdvancementType.CHALLENGE, true, true, true)
@@ -543,7 +543,7 @@ public class TFAdvancementGenerator implements AdvancementSubProvider {
 			.save(consumer, "twilightforest:experiment_115_115");
 
 		Advancement.Builder.advancement().parent(e115).display(
-				TFItems.EXPERIMENT_115.get(),
+				ItemStackTemplate.fromNonEmptyStack(e115Tag("full")),
 				Component.translatable("advancement.twilightforest.experiment_115_2"),
 				Component.translatable("advancement.twilightforest.experiment_115_2.desc"),
 				null, AdvancementType.CHALLENGE, true, true, true)
@@ -581,6 +581,18 @@ public class TFAdvancementGenerator implements AdvancementSubProvider {
 			.rewards(AdvancementRewards.Builder.experience(1000))
 			.save(consumer, "twilightforest:arborist");
 
+	}
+
+	private ItemStack e115Tag(String key) {
+		ItemStack itemstack = new ItemStack(TFItems.EXPERIMENT_115.get());
+		itemstack.set(TFDataComponents.EXPERIMENT_115_VARIANTS, key);
+		return itemstack;
+	}
+
+	private ItemStack flaskWithHarming() {
+		ItemStack itemstack = new ItemStack(TFItems.BRITTLE_FLASK.get());
+		itemstack.set(TFDataComponents.POTION_FLASK_CONTENTS, new PotionFlaskComponent(new PotionContents(Potions.STRONG_HARMING), 4, 0, false));
+		return itemstack;
 	}
 
 	private Advancement.Builder addTFKillable(HolderLookup.Provider registries, Advancement.Builder builder) {

@@ -20,15 +20,15 @@ public class BannerPatternTagGenerator extends TagsProvider<@NotNull BannerPatte
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
-		this.getOrCreateRawBuilder(TFBannerPatternTags.NAGA_BANNER_PATTERN).addElement(TFBannerPatterns.NAGA.identifier());
-		this.getOrCreateRawBuilder(TFBannerPatternTags.LICH_BANNER_PATTERN).addElement(TFBannerPatterns.LICH.identifier());
-		this.getOrCreateRawBuilder(TFBannerPatternTags.MINOSHROOM_BANNER_PATTERN).addElement(TFBannerPatterns.MINOSHROOM.identifier());
-		this.getOrCreateRawBuilder(TFBannerPatternTags.HYDRA_BANNER_PATTERN).addElement(TFBannerPatterns.HYDRA.identifier());
-		this.getOrCreateRawBuilder(TFBannerPatternTags.KNIGHT_PHANTOM_BANNER_PATTERN).addElement(TFBannerPatterns.KNIGHT_PHANTOM.identifier());
-		this.getOrCreateRawBuilder(TFBannerPatternTags.UR_GHAST_BANNER_PATTERN).addElement(TFBannerPatterns.UR_GHAST.identifier());
-		this.getOrCreateRawBuilder(TFBannerPatternTags.ALPHA_YETI_BANNER_PATTERN).addElement(TFBannerPatterns.ALPHA_YETI.identifier());
-		this.getOrCreateRawBuilder(TFBannerPatternTags.SNOW_QUEEN_BANNER_PATTERN).addElement(TFBannerPatterns.SNOW_QUEEN.identifier());
-		this.getOrCreateRawBuilder(TFBannerPatternTags.QUESTING_RAM_BANNER_PATTERN).addElement(TFBannerPatterns.QUESTING_RAM.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.NAGA_BANNER_PATTERN).addTag(TFBannerPatterns.NAGA.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.LICH_BANNER_PATTERN).addTag(TFBannerPatterns.LICH.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.MINOSHROOM_BANNER_PATTERN).addTag(TFBannerPatterns.MINOSHROOM.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.HYDRA_BANNER_PATTERN).addTag(TFBannerPatterns.HYDRA.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.KNIGHT_PHANTOM_BANNER_PATTERN).addTag(TFBannerPatterns.KNIGHT_PHANTOM.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.UR_GHAST_BANNER_PATTERN).addTag(TFBannerPatterns.UR_GHAST.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.ALPHA_YETI_BANNER_PATTERN).addTag(TFBannerPatterns.ALPHA_YETI.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.SNOW_QUEEN_BANNER_PATTERN).addTag(TFBannerPatterns.SNOW_QUEEN.identifier());
+		this.getOrCreateRawBuilder(TFBannerPatternTags.QUESTING_RAM_BANNER_PATTERN).addTag(TFBannerPatterns.QUESTING_RAM.identifier());
 	}
 
 	@Override

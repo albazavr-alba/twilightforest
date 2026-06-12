@@ -71,7 +71,7 @@ public class DamageTypeTagGenerator extends TagsProvider<@NotNull DamageType> {
 	@SafeVarargs
 	private void tag(ResourceKey<@NotNull DamageType> type, TagKey<@NotNull DamageType>... tags) {
 		for (TagKey<@NotNull DamageType> key : tags) {
-			getOrCreateRawBuilder(key).addElement(type.identifier());
+			getOrCreateRawBuilder(key).addTag(type.identifier());
 		}
 	}
 }

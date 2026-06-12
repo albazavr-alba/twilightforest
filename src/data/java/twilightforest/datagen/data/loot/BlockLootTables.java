@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -132,10 +132,6 @@ public class BlockLootTables extends BlockLootSubProvider {
 		dropSelf(TFBlocks.TWILIGHT_PORTAL_MINIATURE_STRUCTURE.get());
 		dropSelf(TFBlocks.NAGA_COURTYARD_MINIATURE_STRUCTURE.get());
 		dropSelf(TFBlocks.LICH_TOWER_MINIATURE_STRUCTURE.get());
-		dropSelf(TFBlocks.MINOTAUR_LABYRINTH_MINIATURE_STRUCTURE.get());
-		dropSelf(TFBlocks.DARK_TOWER_MINIATURE_STRUCTURE.get());
-
-
 		dropSelf(TFBlocks.KNIGHTMETAL_BLOCK.get());
 		dropSelf(TFBlocks.IRONWOOD_BLOCK.get());
 		dropSelf(TFBlocks.FIERY_BLOCK.get());
@@ -167,7 +163,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 					.add(
 						LootItem.lootTableItem(TFBlocks.MASON_JAR.get())
 							.apply(
-								CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+								CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 									.include(DataComponents.CUSTOM_NAME)
 									.include(DataComponents.CONTAINER)
 									.include(DataComponents.LOCK)
@@ -186,7 +182,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 					.add(
 						LootItem.lootTableItem(TFBlocks.FIREFLY_JAR.get())
 							.apply(
-								CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+								CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 									.include(TFDataComponents.JAR_LID.get())
 							)
 					)
@@ -201,7 +197,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 					.add(
 						LootItem.lootTableItem(TFBlocks.CICADA_JAR.get())
 							.apply(
-								CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+								CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 									.include(TFDataComponents.JAR_LID.get())
 							)
 					)
@@ -264,13 +260,13 @@ public class BlockLootTables extends BlockLootSubProvider {
 		add(TFBlocks.CREEPER_SKULL_CANDLE.get(), createSingleItemTable(Blocks.CREEPER_HEAD));
 		add(TFBlocks.CREEPER_WALL_SKULL_CANDLE.get(), createSingleItemTable(Blocks.CREEPER_HEAD));
 		add(TFBlocks.PLAYER_SKULL_CANDLE.get(), createSingleItemTable(Blocks.PLAYER_HEAD).apply(
-			CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+			CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 				.include(DataComponents.PROFILE)
 				.include(DataComponents.NOTE_BLOCK_SOUND)
 				.include(DataComponents.CUSTOM_NAME)
 		));
 		add(TFBlocks.PLAYER_WALL_SKULL_CANDLE.get(), createSingleItemTable(Blocks.PLAYER_HEAD).apply(
-			CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+			CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 				.include(DataComponents.PROFILE)
 				.include(DataComponents.NOTE_BLOCK_SOUND)
 				.include(DataComponents.CUSTOM_NAME)
@@ -596,40 +592,6 @@ public class BlockLootTables extends BlockLootSubProvider {
 		ominousCandle(TFBlocks.OMINOUS_GREEN_CANDLE);
 		ominousCandle(TFBlocks.OMINOUS_RED_CANDLE);
 		ominousCandle(TFBlocks.OMINOUS_BLACK_CANDLE);
-
-		add(TFBlocks.IRON_OREBERRY_BUSH.get(), createSingleItemTable(TFItems.IRON_BERRY.get().asItem()));
-		add(TFBlocks.COPPER_OREBERRY_BUSH.get(), createSingleItemTable(TFItems.COPPER_BERRY.get().asItem()));
-		add(TFBlocks.GOLD_OREBERRY_BUSH.get(), createSingleItemTable(TFItems.GOLD_BERRY.get().asItem()));
-		add(TFBlocks.ESSENCE_OREBERRY_BUSH.get(), createSingleItemTable(TFItems.ESSENCE_BERRY.get().asItem()));
-		add(TFBlocks.RASPBERRY_BUSH.get(), createSingleItemTable(TFItems.RASPBERRY.get().asItem()));
-		add(TFBlocks.BLACKBERRY_BUSH.get(), createSingleItemTable(TFItems.BLACKBERRY.get().asItem()));
-		add(TFBlocks.BLIGHTBERRY_BUSH.get(), createSingleItemTable(TFItems.BLIGHTBERRY.get().asItem()));
-		add(TFBlocks.BLUEBERRY_BUSH.get(), createSingleItemTable(TFItems.BLUEBERRY.get().asItem()));
-		add(TFBlocks.DUSKBERRY_BUSH.get(), createSingleItemTable(TFItems.DUSKBERRY.get().asItem()));
-		add(TFBlocks.MALOBERRY_BUSH.get(), createSingleItemTable(TFItems.MALOBERRY.get().asItem()));
-		add(TFBlocks.SKYBERRY_BUSH.get(), createSingleItemTable(TFItems.SKYBERRY.get().asItem()));
-		add(TFBlocks.STINGBERRY_BUSH.get(), createSingleItemTable(TFItems.STINGBERRY.get().asItem()));
-
-		dropSelf(TFBlocks.ACACIA_DRYING_RACK.get());
-		dropSelf(TFBlocks.BAMBOO_DRYING_RACK.get());
-		dropSelf(TFBlocks.BIRCH_DRYING_RACK.get());
-		dropSelf(TFBlocks.CANOPY_DRYING_RACK.get());
-		dropSelf(TFBlocks.CHERRY_DRYING_RACK.get());
-		dropSelf(TFBlocks.CRIMSON_DRYING_RACK.get());
-		dropSelf(TFBlocks.DARK_DRYING_RACK.get());
-		dropSelf(TFBlocks.DARK_OAK_DRYING_RACK.get());
-		dropSelf(TFBlocks.JUNGLE_DRYING_RACK.get());
-		dropSelf(TFBlocks.MANGROVE_DRYING_RACK.get());
-		dropSelf(TFBlocks.MINING_DRYING_RACK.get());
-		dropSelf(TFBlocks.OAK_DRYING_RACK.get());
-		dropSelf(TFBlocks.PALE_OAK_DRYING_RACK.get());
-		dropSelf(TFBlocks.SORTING_DRYING_RACK.get());
-		dropSelf(TFBlocks.SPRUCE_DRYING_RACK.get());
-		dropSelf(TFBlocks.TIME_DRYING_RACK.get());
-		dropSelf(TFBlocks.TRANSFORMATION_DRYING_RACK.get());
-		dropSelf(TFBlocks.TWILIGHT_OAK_DRYING_RACK.get());
-		dropSelf(TFBlocks.VANGROVE_DRYING_RACK.get());
-		dropSelf(TFBlocks.WARPED_DRYING_RACK.get());
 	}
 
 	private void registerLeavesNoSapling(Block leaves, HolderLookup.RegistryLookup<@NotNull Enchantment> registrylookup) {
@@ -678,7 +640,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 			.withPool(LootPool.lootPool()
 				.setRolls(ConstantValue.exactly(1))
 				.add(LootItem.lootTableItem(block)
-					.apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(DataComponents.CUSTOM_NAME))));
+					.apply(CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity")).include(DataComponents.CUSTOM_NAME))));
 	}
 
 	private static LootTable.Builder casketInfo(Block block) {
@@ -686,7 +648,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 			.withPool(LootPool.lootPool()
 				.setRolls(ConstantValue.exactly(1))
 				.add(LootItem.lootTableItem(block)
-					.apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(DataComponents.CUSTOM_NAME))
+					.apply(CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity")).include(DataComponents.CUSTOM_NAME))
 					.apply(CopyBlockState.copyState(block).copy(KeepsakeCasketBlock.BREAKAGE))));
 	}
 
@@ -810,14 +772,6 @@ public class BlockLootTables extends BlockLootSubProvider {
 
 	@Override
 	protected Iterable<Block> getKnownBlocks() {
-		return TFBlocks.BLOCKS.getEntries().stream()
-			.map(DeferredHolder::value)
-			.filter(block ->
-				block.asItem() != net.minecraft.world.item.Items.AIR ||
-					block instanceof FlowerPotBlock ||
-					block == TFBlocks.OMINOUS_FIRE.get() ||
-					block.getDescriptionId().contains("ominous")
-			)
-			.collect(Collectors.toList());
+		return TFBlocks.BLOCKS.getEntries().stream().map(DeferredHolder::value).collect(Collectors.toList());
 	}
 }
