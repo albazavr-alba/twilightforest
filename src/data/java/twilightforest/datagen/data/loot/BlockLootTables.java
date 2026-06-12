@@ -1,10 +1,11 @@
 package twilightforest.datagen.data.loot;
 
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -30,6 +31,7 @@ import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.loot.CanItemPerformAbility;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.block.*;
 import twilightforest.enums.HollowLogVariants;
 import twilightforest.init.TFBlocks;
@@ -52,7 +54,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 
 	@Override
 	protected void generate() {
-		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		HolderLookup.RegistryLookup<@NotNull Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
 		dropSelf(TFBlocks.TOWERWOOD.get());
 		dropSelf(TFBlocks.ENCASED_TOWERWOOD.get());
@@ -161,7 +163,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 					.add(
 						LootItem.lootTableItem(TFBlocks.MASON_JAR.get())
 							.apply(
-								CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+								CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 									.include(DataComponents.CUSTOM_NAME)
 									.include(DataComponents.CONTAINER)
 									.include(DataComponents.LOCK)
@@ -180,7 +182,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 					.add(
 						LootItem.lootTableItem(TFBlocks.FIREFLY_JAR.get())
 							.apply(
-								CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+								CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 									.include(TFDataComponents.JAR_LID.get())
 							)
 					)
@@ -195,7 +197,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 					.add(
 						LootItem.lootTableItem(TFBlocks.CICADA_JAR.get())
 							.apply(
-								CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+								CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 									.include(TFDataComponents.JAR_LID.get())
 							)
 					)
@@ -258,13 +260,13 @@ public class BlockLootTables extends BlockLootSubProvider {
 		add(TFBlocks.CREEPER_SKULL_CANDLE.get(), createSingleItemTable(Blocks.CREEPER_HEAD));
 		add(TFBlocks.CREEPER_WALL_SKULL_CANDLE.get(), createSingleItemTable(Blocks.CREEPER_HEAD));
 		add(TFBlocks.PLAYER_SKULL_CANDLE.get(), createSingleItemTable(Blocks.PLAYER_HEAD).apply(
-			CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+			CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 				.include(DataComponents.PROFILE)
 				.include(DataComponents.NOTE_BLOCK_SOUND)
 				.include(DataComponents.CUSTOM_NAME)
 		));
 		add(TFBlocks.PLAYER_WALL_SKULL_CANDLE.get(), createSingleItemTable(Blocks.PLAYER_HEAD).apply(
-			CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+			CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity"))
 				.include(DataComponents.PROFILE)
 				.include(DataComponents.NOTE_BLOCK_SOUND)
 				.include(DataComponents.CUSTOM_NAME)
@@ -592,7 +594,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 		ominousCandle(TFBlocks.OMINOUS_BLACK_CANDLE);
 	}
 
-	private void registerLeavesNoSapling(Block leaves, HolderLookup.RegistryLookup<Enchantment> registrylookup) {
+	private void registerLeavesNoSapling(Block leaves, HolderLookup.RegistryLookup<@NotNull Enchantment> registrylookup) {
 		LootPoolEntryContainer.Builder<?> sticks = applyExplosionDecay(leaves, LootItem.lootTableItem(Items.STICK)
 			.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
 			.when(BonusLevelTableCondition.bonusLevelFlatChance(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F)));
@@ -600,7 +602,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 	}
 
 	private LootTable.Builder hollowLog(Block log) {
-		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		HolderLookup.RegistryLookup<@NotNull Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 		return LootTable.lootTable()
 			.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
 				.add(LootItem.lootTableItem(log.asItem()).when(this.hasSilkTouch()).otherwise(LootItem.lootTableItem(Items.STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F))).apply(ApplyBonusCount.addUniformBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))))))
@@ -621,7 +623,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 	}
 
 	private LootTable.Builder verticalHollowLog(Block log) {
-		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		HolderLookup.RegistryLookup<@NotNull Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 		return LootTable.lootTable()
 			.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
 				.add(LootItem.lootTableItem(log.asItem()).when(this.hasSilkTouch()).otherwise(LootItem.lootTableItem(Items.STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F))).apply(ApplyBonusCount.addUniformBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))))));
@@ -629,7 +631,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 
 	// [VanillaCopy] super.droppingWithChancesAndSticks, but non-silk touch parameter can be an item instead of a block
 	private LootTable.Builder silkAndStick(Block block, ItemLike nonSilk, float... nonSilkFortune) {
-		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+		HolderLookup.RegistryLookup<@NotNull Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 		return createSilkTouchOrShearsDispatchTable(block, this.applyExplosionCondition(block, LootItem.lootTableItem(nonSilk.asItem())).when(BonusLevelTableCondition.bonusLevelFlatChance(registrylookup.getOrThrow(Enchantments.FORTUNE), nonSilkFortune))).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when((HAS_SHEARS.or(this.hasSilkTouch())).invert()).add(applyExplosionDecay(block, LootItem.lootTableItem(Items.STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).when(BonusLevelTableCondition.bonusLevelFlatChance(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F))));
 	}
 
@@ -638,7 +640,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 			.withPool(LootPool.lootPool()
 				.setRolls(ConstantValue.exactly(1))
 				.add(LootItem.lootTableItem(block)
-					.apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(DataComponents.CUSTOM_NAME))));
+					.apply(CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity")).include(DataComponents.CUSTOM_NAME))));
 	}
 
 	private static LootTable.Builder casketInfo(Block block) {
@@ -646,7 +648,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 			.withPool(LootPool.lootPool()
 				.setRolls(ConstantValue.exactly(1))
 				.add(LootItem.lootTableItem(block)
-					.apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY).include(DataComponents.CUSTOM_NAME))
+					.apply(CopyComponentsFunction.copyComponentsFromBlockEntity(ContextKey.vanilla("block_entity")).include(DataComponents.CUSTOM_NAME))
 					.apply(CopyBlockState.copyState(block).copy(KeepsakeCasketBlock.BREAKAGE))));
 	}
 
@@ -729,7 +731,7 @@ public class BlockLootTables extends BlockLootSubProvider {
 					.apply(SetItemCountFunction.setCount(ConstantValue.exactly(layer)))).when(HAS_SHEARS))));
 	}
 
-	protected void ominousCandle(DeferredBlock<OminousCandleBlock> block) {
+	protected void ominousCandle(DeferredBlock<@NotNull OminousCandleBlock> block) {
 		this.add(block.get(), LootTable.lootTable()
 			.withPool(
 				LootPool.lootPool()
