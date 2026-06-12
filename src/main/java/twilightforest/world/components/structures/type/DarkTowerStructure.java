@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
@@ -15,6 +14,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFEntities;
@@ -48,7 +48,7 @@ public class DarkTowerStructure extends ControlledSpawningStructure {
 		return TFStructureTypes.DARK_TOWER.get();
 	}
 
-	public static DarkTowerStructure buildDarkTowerConfig(BootstrapContext<Structure> context) {
+	public static DarkTowerStructure buildDarkTowerConfig(BootstrapContext<@NotNull Structure> context) {
 		return new DarkTowerStructure(
 			ControlledSpawningConfig.create(List.of(WeightedList.<MobSpawnSettings.SpawnerData>builder()
 				.add(new MobSpawnSettings.SpawnerData(TFEntities.CARMINITE_GOLEM.get(), 1, 2), 10)
