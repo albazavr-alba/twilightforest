@@ -22,22 +22,20 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.gamerules.GameRule;
-import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
 import twilightforest.config.TFConfig;
-import twilightforest.init.TFKeyBindsCategories;
 import twilightforest.item.travellers_gear.modifiers.TravellersModifier;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 public abstract class TFLangProvider extends LanguageProvider {
 
@@ -65,7 +63,7 @@ public abstract class TFLangProvider extends LanguageProvider {
 
 	protected abstract void addTranslations(HolderLookup.Provider registries);
 
-	public void addBiome(ResourceKey<Biome> biome, String name) {
+	public void addBiome(ResourceKey<@NotNull Biome> biome, String name) {
 		this.add("biome.twilightforest." + biome.identifier().getPath(), name);
 	}
 
@@ -108,11 +106,11 @@ public abstract class TFLangProvider extends LanguageProvider {
 		this.add("block.twilightforest." + woodPrefix + "_drying_rack", woodName + " Drying Rack");
 	}
 
-	public <T> void addGameRule(DeferredHolder<GameRule<?>, GameRule<T>> gameRule, String gameRuleName) {
+	public <T> void addGameRule(DeferredHolder<@NotNull GameRule<?>, @NotNull GameRule<@NotNull T>> gameRule, String gameRuleName) {
 		this.add("gamerule." + gameRule.get().id(), gameRuleName);
 	}
 
-	public <T> void addGameRuleDescription(DeferredHolder<GameRule<?>, GameRule<T>> gameRule, String gameRuleDescription) {
+	public <T> void addGameRuleDescription(DeferredHolder<@NotNull GameRule<?>, @NotNull GameRule<@NotNull T>> gameRule, String gameRuleDescription) {
 		this.add("gamerule." + gameRule.get().id() + ".description", gameRuleDescription);
 	}
 
@@ -145,12 +143,12 @@ public abstract class TFLangProvider extends LanguageProvider {
 		this.add("item.twilightforest." + itemKey + "_hoe", item + " Hoe");
 	}
 
-	public void addMusicDisc(DeferredItem<Item> disc, String description) {
+	public void addMusicDisc(DeferredItem<@NotNull Item> disc, String description) {
 		this.addItem(disc, "Music Disc");
 		this.add(Util.makeDescriptionId("jukebox_song", disc.get().components().get(DataComponents.JUKEBOX_PLAYABLE).song().getKey().identifier()), description);
 	}
 
-	public void addStructure(ResourceKey<Structure> biome, String name) {
+	public void addStructure(ResourceKey<@NotNull Structure> biome, String name) {
 		this.add("structure.twilightforest." + biome.identifier().getPath(), name);
 	}
 
@@ -164,7 +162,7 @@ public abstract class TFLangProvider extends LanguageProvider {
 		this.add("enchantment.twilightforest." + key + ".desc", desc);
 	}
 
-	public void addEntityAndEgg(DeferredHolder<EntityType<?>, ? extends EntityType<?>> entity, String name) {
+	public void addEntityAndEgg(DeferredHolder<@NotNull EntityType<?>, ? extends @NotNull EntityType<?>> entity, String name) {
 		this.addEntityType(entity, name);
 		this.add("item.twilightforest." + entity.getId().getPath() + "_spawn_egg", name + " Spawn Egg");
 	}
@@ -210,11 +208,11 @@ public abstract class TFLangProvider extends LanguageProvider {
 		this.add(keyMapping.getName(), name);
 	}
 
-	public void addTravellersModifier(HolderLookup.Provider registries, ResourceKey<TravellersModifier> modifier, String name) {
+	public void addTravellersModifier(HolderLookup.Provider registries, ResourceKey<@NotNull TravellersModifier> modifier, String name) {
 		this.add(modifier.identifier().toLanguageKey(registries.holderOrThrow(modifier).value().getPrefix()), name);
 	}
 
-	public void addTravellersDescription(HolderLookup.Provider registries, ResourceKey<TravellersModifier> modifier, String description) {
+	public void addTravellersDescription(HolderLookup.Provider registries, ResourceKey<@NotNull TravellersModifier> modifier, String description) {
 		this.add(modifier.identifier().toLanguageKey(registries.holderOrThrow(modifier).value().getPrefix(), "description"), description);
 	}
 
@@ -244,12 +242,10 @@ public abstract class TFLangProvider extends LanguageProvider {
 		//generate normal lang file
 		CompletableFuture<?> languageGen = this.registries.thenCompose(provider -> {
 			this.addTranslations(provider);
-			if (!this.data.isEmpty())
-				return this.save(cache, this.output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(TwilightForestMod.ID).resolve("lang").resolve("en_us.json"));
-			return null;
+			return this.run(cache);
 		});
 
-		ImmutableList.Builder<CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
+		ImmutableList.Builder<@NotNull CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
 		futuresBuilder.add(languageGen);
 
 		//generate en_ud file
