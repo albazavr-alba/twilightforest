@@ -178,7 +178,7 @@ public class TFBlocks {
 	public static final DeferredBlock<Block> LOCKED_VANISHING_BLOCK = registerWithItem("locked_vanishing_block", LockedVanishingBlock::new, () -> BlockBehaviour.Properties.of().pushReaction(PushReaction.BLOCK).mapColor(MapColor.SAND).sound(SoundType.WOOD).strength(-1.0F, 2000.0F));
 	public static final DeferredBlock<Block> CARMINITE_BUILDER = registerWithItem("carminite_builder", BuilderBlock::new, () -> BlockBehaviour.Properties.of().lightLevel((state) -> state.getValue(BuilderBlock.STATE) == TowerDeviceVariant.BUILDER_ACTIVE ? 4 : 0).mapColor(MapColor.SAND).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.WOOD).strength(10.0F, 6.0F));
 	public static final DeferredBlock<Block> BUILT_BLOCK = register("built_block", TranslucentBuiltBlock::new, () -> BlockBehaviour.Properties.of().noLootTable().noOcclusion().pushReaction(PushReaction.BLOCK).sound(SoundType.WOOD).strength(50.0F, 2000.0F));
-	public static final DeferredBlock<Block> ANTIBUILDER = registerWithItem("antibuilder", AntibuilderBlock::new, () -> BlockBehaviour.Properties.of().lightLevel((state) -> 10).noLootTable().pushReaction(PushReaction.BLOCK).mapColor(MapColor.SAND).requiresCorrectToolForDrops().sound(SoundType.WOOD).strength(10.0F, 6.0F));
+	public static final DeferredBlock<Block> ANTIBUILDER = register("antibuilder", AntibuilderBlock::new, () -> BlockBehaviour.Properties.of().lightLevel((state) -> 10).noLootTable().pushReaction(PushReaction.BLOCK).mapColor(MapColor.SAND).requiresCorrectToolForDrops().sound(SoundType.WOOD).strength(10.0F, 6.0F));
 	public static final DeferredBlock<Block> ANTIBUILT_BLOCK = register("antibuilt_block", Block::new, () -> BlockBehaviour.Properties.of().noLootTable().noOcclusion().pushReaction(PushReaction.BLOCK).sound(SoundType.WOOD).strength(0.3F, 2000.0F));
 	public static final DeferredBlock<GhastTrapBlock> GHAST_TRAP = registerWithItem("ghast_trap", GhastTrapBlock::new, () -> BlockBehaviour.Properties.of().lightLevel((state) -> state.getValue(GhastTrapBlock.ACTIVE) ? 15 : 0).mapColor(MapColor.SAND).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.WOOD).strength(10.0F, 6.0F));
 	public static final DeferredBlock<Block> CARMINITE_REACTOR = registerWithItem("carminite_reactor", CarminiteReactorBlock::new, () -> BlockBehaviour.Properties.of().lightLevel((state) -> state.getValue(CarminiteReactorBlock.ACTIVE) ? 15 : 0).mapColor(MapColor.SAND).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().sound(SoundType.WOOD).strength(10.0F, 6.0F));
@@ -681,8 +681,11 @@ public class TFBlocks {
 	}
 
 	public static DeferredBlock<OminousCandleBlock> ominousCandle(String name, MapColor mapColor, Block candle) {
+		ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, TwilightForestMod.prefix(name));
+
 		return BLOCKS.register(name, () -> new OminousCandleBlock(candle,
 			BlockBehaviour.Properties.of()
+				.setId(blockKey)
 				.mapColor(mapColor)
 				.noOcclusion()
 				.strength(0.1F)
