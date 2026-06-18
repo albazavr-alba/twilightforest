@@ -20,13 +20,13 @@ public class WoodPaletteTagGenerator extends TagsProvider<@NotNull WoodPalette> 
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
-		getOrCreateRawBuilder(TFWoodPaletteTags.WELL_SWIZZLE_MASK).addTag(WoodPalettes.OAK.identifier());
-		getOrCreateRawBuilder(TFWoodPaletteTags.DRUID_HUT_SWIZZLE_MASK).addTag(WoodPalettes.OAK.identifier()).addTag(WoodPalettes.SPRUCE.identifier()).addTag(WoodPalettes.BIRCH.identifier());
+		getOrCreateRawBuilder(TFWoodPaletteTags.WELL_SWIZZLE_MASK).addElement(WoodPalettes.OAK.identifier());
+		getOrCreateRawBuilder(TFWoodPaletteTags.DRUID_HUT_SWIZZLE_MASK).addElement(WoodPalettes.OAK.identifier()).addElement(WoodPalettes.SPRUCE.identifier()).addElement(WoodPalettes.BIRCH.identifier());
 
-		getOrCreateRawBuilder(TFWoodPaletteTags.COMMON_PALETTES).addTag(WoodPalettes.SPRUCE.identifier()).addTag(WoodPalettes.CANOPY.identifier());
-		getOrCreateRawBuilder(TFWoodPaletteTags.UNCOMMON_PALETTES).addTag(WoodPalettes.OAK.identifier()).addTag(WoodPalettes.DARKWOOD.identifier()).addTag(WoodPalettes.TWILIGHT_OAK.identifier());
-		getOrCreateRawBuilder(TFWoodPaletteTags.RARE_PALETTES).addTag(WoodPalettes.BIRCH.identifier()).addTag(WoodPalettes.JUNGLE.identifier()).addTag(WoodPalettes.MANGROVE.identifier());
-		getOrCreateRawBuilder(TFWoodPaletteTags.TREASURE_PALETTES).addTag(WoodPalettes.TIMEWOOD.identifier()).addTag(WoodPalettes.TRANSWOOD.identifier()).addTag(WoodPalettes.MINEWOOD.identifier()).addTag(WoodPalettes.SORTWOOD.identifier());
+		getOrCreateRawBuilder(TFWoodPaletteTags.COMMON_PALETTES).addElement(WoodPalettes.SPRUCE.identifier()).addElement(WoodPalettes.CANOPY.identifier());
+		getOrCreateRawBuilder(TFWoodPaletteTags.UNCOMMON_PALETTES).addElement(WoodPalettes.OAK.identifier()).addElement(WoodPalettes.DARKWOOD.identifier()).addElement(WoodPalettes.TWILIGHT_OAK.identifier());
+		getOrCreateRawBuilder(TFWoodPaletteTags.RARE_PALETTES).addElement(WoodPalettes.BIRCH.identifier()).addElement(WoodPalettes.JUNGLE.identifier()).addElement(WoodPalettes.MANGROVE.identifier());
+		getOrCreateRawBuilder(TFWoodPaletteTags.TREASURE_PALETTES).addElement(WoodPalettes.TIMEWOOD.identifier()).addElement(WoodPalettes.TRANSWOOD.identifier()).addElement(WoodPalettes.MINEWOOD.identifier()).addElement(WoodPalettes.SORTWOOD.identifier());
 	}
 
 	@Override
