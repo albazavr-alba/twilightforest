@@ -20,7 +20,7 @@ public class DimensionTypeTagGenerator extends TagsProvider<@NotNull DimensionTy
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
-		this.getOrCreateRawBuilder(TFDimensionTypeTags.ALLOWS_MAGIC_MAP_CHARTING).addTag(TFDimensionData.TWILIGHT_DIM_TYPE.identifier());
+		this.getOrCreateRawBuilder(TFDimensionTypeTags.ALLOWS_MAGIC_MAP_CHARTING).addElement(TFDimensionData.TWILIGHT_DIM_TYPE.identifier());
 	}
 
 	@Override
