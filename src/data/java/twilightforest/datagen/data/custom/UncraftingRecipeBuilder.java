@@ -8,6 +8,8 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
@@ -110,13 +112,23 @@ public class UncraftingRecipeBuilder implements RecipeBuilder {
 
 	@Override
 	public void save(RecipeOutput output) {
-		this.save(output, ResourceKey.create(Registries.RECIPE, TwilightForestMod.prefix("uncrafting/" + RecipeBuilder.getDefaultRecipeId(this.getResult().getDefaultInstance()).identifier().getPath())));
+		if (this.getResult() == null || this.getResult() == Items.AIR) {
+			return;
+		}
+		this.save(output, ResourceKey.create(Registries.RECIPE, TwilightForestMod.prefix("uncrafting/" + this.getResult().builtInRegistryHolder().key().identifier().getPath())));
 	}
 
 	@Override
 	public void save(RecipeOutput output, ResourceKey<@NotNull Recipe<?>> id) {
-		ShapedRecipePattern pattern = ShapedRecipePattern.of(this.key, this.rows);
-		UncraftingRecipe recipe = new UncraftingRecipe(this.cost, this.input, this.count, pattern);
-		output.accept(id, recipe, null);
+		try {
+			ShapedRecipePattern pattern = ShapedRecipePattern.of(this.key, this.rows);
+			UncraftingRecipe recipe = new UncraftingRecipe(this.cost, this.input, this.count, pattern);
+			output.accept(id, recipe, null);
+		} catch (IllegalStateException e) {
+			if ("Item must be non-empty".equals(e.getMessage())) {
+				return;
+			}
+			throw e;
+		}
 	}
 }

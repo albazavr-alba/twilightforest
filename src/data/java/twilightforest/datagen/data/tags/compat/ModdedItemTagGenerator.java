@@ -2,7 +2,10 @@ package twilightforest.datagen.data.tags.compat;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.data.BlockTagCopyingItemTagProvider;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
 import twilightforest.init.TFBlocks;
 import twilightforest.init.TFItems;
@@ -10,10 +13,10 @@ import twilightforest.tags.TFItemTags;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModdedItemTagGenerator extends ItemTagsProvider {
+public class ModdedItemTagGenerator extends BlockTagCopyingItemTagProvider {
 
-	public ModdedItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-		super(output, future, TwilightForestMod.ID);
+	public ModdedItemTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagsProvider.TagLookup<@NotNull Block>> provider) {
+		super(output, future, provider, TwilightForestMod.ID);
 	}
 
 	@Override
