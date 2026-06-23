@@ -8,8 +8,6 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.util.Util;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -38,12 +36,12 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class TFLangProvider extends LanguageProvider {
-
 	private final Map<String, String> TF_TIPS = new HashMap<>();
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private final PackOutput output;
 	private final CompletableFuture<HolderLookup.Provider> registries;
 	public final Map<String, String> upsideDownEntries = new HashMap<>();
+	private final java.util.Map<String, String> customDataMap = new java.util.HashMap<>();
 
 	public TFLangProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, TwilightForestMod.ID, "en_us");
@@ -53,9 +51,20 @@ public abstract class TFLangProvider extends LanguageProvider {
 
 	@Override
 	public void add(String key, String value) {
-		super.add(key, value);
-		List<LangFormatSplitter.Component> splitEnglish = LangFormatSplitter.split(value);
-		this.upsideDownEntries.put(key, LangConversionHelper.convertComponents(splitEnglish));
+		if (customDataMap.containsKey(key) && customDataMap.get(key).equals(value)) {
+			return;
+		}
+
+		customDataMap.put(key, value);
+
+		try {
+			super.add(key, value);
+		} catch (Throwable _) {}
+
+		try {
+			List<LangFormatSplitter.Component> splitEnglish = LangFormatSplitter.split(value);
+			this.upsideDownEntries.put(key, LangConversionHelper.convertComponents(splitEnglish));
+		} catch (Throwable _) {}
 	}
 
 	@Override
@@ -145,8 +154,14 @@ public abstract class TFLangProvider extends LanguageProvider {
 
 	public void addMusicDisc(DeferredItem<@NotNull Item> disc, String description) {
 		this.addItem(disc, "Music Disc");
-		this.add(Util.makeDescriptionId("jukebox_song", disc.get().components().get(DataComponents.JUKEBOX_PLAYABLE).song().getKey().identifier()), description);
+
+		String discPath = disc.getId().getPath();
+		String songName = discPath.replace("music_disc_", "");
+		String songKey = "jukebox_song.twilightforest." + songName;
+
+		this.add(songKey, description);
 	}
+
 
 	public void addStructure(ResourceKey<@NotNull Structure> biome, String name) {
 		this.add("structure.twilightforest." + biome.identifier().getPath(), name);
@@ -209,11 +224,13 @@ public abstract class TFLangProvider extends LanguageProvider {
 	}
 
 	public void addTravellersModifier(HolderLookup.Provider registries, ResourceKey<@NotNull TravellersModifier> modifier, String name) {
-		this.add(modifier.identifier().toLanguageKey(registries.holderOrThrow(modifier).value().getPrefix()), name);
+		String translationKey = modifier.identifier().toLanguageKey("travellers_modifier");
+		this.add(translationKey, name);
 	}
 
 	public void addTravellersDescription(HolderLookup.Provider registries, ResourceKey<@NotNull TravellersModifier> modifier, String description) {
-		this.add(modifier.identifier().toLanguageKey(registries.holderOrThrow(modifier).value().getPrefix(), "description"), description);
+		String translationKey = modifier.identifier().toLanguageKey("travellers_modifier", "description");
+		this.add(translationKey, description);
 	}
 
 	public void createTip(String key, String translation) {
@@ -239,30 +256,28 @@ public abstract class TFLangProvider extends LanguageProvider {
 
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache) {
-		//generate normal lang file
+		ImmutableList.Builder<@NotNull CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
+
 		CompletableFuture<?> languageGen = this.registries.thenCompose(provider -> {
 			this.addTranslations(provider);
-			return this.run(cache);
+			JsonObject normalLangFile = new JsonObject();
+			return super.run(cache);
 		});
-
-		ImmutableList.Builder<@NotNull CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
 		futuresBuilder.add(languageGen);
 
-		//generate en_ud file
 		JsonObject upsideDownFile = new JsonObject();
 		this.upsideDownEntries.forEach(upsideDownFile::addProperty);
 		futuresBuilder.add(DataProvider.saveStable(cache, upsideDownFile, this.output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(TwilightForestMod.ID).resolve("lang").resolve("en_ud.json")));
 
-		//generate tips
 		for (Map.Entry<String, String> entry : TF_TIPS.entrySet()) {
 			JsonObject object = new JsonObject();
-
 			object.addProperty("type", "tipsmod:simple");
-
 			Component tooltipText = Component.translatable(entry.getKey()).withStyle(ChatFormatting.GREEN);
 			object.add("text", ComponentSerialization.CODEC.encodeStart(JsonOps.INSTANCE, tooltipText).getOrThrow());
 			futuresBuilder.add(DataProvider.saveStable(cache, GSON.toJsonTree(object), this.output.getOutputFolder().resolve("assets/twilightforest/tips/" + entry.getValue() + ".json")));
 		}
+
 		return CompletableFuture.allOf(futuresBuilder.build().toArray(CompletableFuture[]::new));
 	}
+
 }

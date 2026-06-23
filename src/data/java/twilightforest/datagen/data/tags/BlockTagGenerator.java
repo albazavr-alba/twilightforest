@@ -228,7 +228,9 @@ public class BlockTagGenerator extends ModdedBlockTagGenerator {
 		this.tag(Tags.Blocks.STORAGE_BLOCKS).addTags(TFBlockTags.STORAGE_BLOCKS_ARCTIC_FUR, TFBlockTags.STORAGE_BLOCKS_CARMINITE, TFBlockTags.STORAGE_BLOCKS_FIERY, TFBlockTags.STORAGE_BLOCKS_IRONWOOD, TFBlockTags.STORAGE_BLOCKS_KNIGHTMETAL, TFBlockTags.STORAGE_BLOCKS_STEELEAF);
 
 		this.tag(BlockTags.DIRT).add(TFBlocks.UBEROUS_SOIL.get());
-		this.tag(TFBlockTags.PORTAL_EDGE).add(Blocks.FARMLAND, Blocks.DIRT_PATH).addTags(BlockTags.DIRT);
+		this.tag(TFBlockTags.PORTAL_EDGE)
+			.add(Blocks.GRASS_BLOCK, Blocks.MYCELIUM, Blocks.FARMLAND, Blocks.DIRT_PATH)
+			.addTags(BlockTags.DIRT);
 		this.tag(TFBlockTags.PORTAL_POOL).add(Blocks.WATER);
 		this.tag(TFBlockTags.PORTAL_DECO).add(
 				Blocks.BAMBOO,
