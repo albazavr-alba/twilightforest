@@ -1,9 +1,7 @@
 package twilightforest.client.model.block.patch;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.dispatch.ModelState;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
@@ -182,10 +180,6 @@ public class PatchModel implements UnbakedGeometry {
 	@Override
 	public QuadCollection bake(TextureSlots textureSlots, ModelBaker modelBaker, ModelState modelState, ModelDebugName modelDebugName) {
 		QuadCollection.Builder builder = new QuadCollection.Builder();
-
-		TextureAtlas atlas = Minecraft.getInstance()
-			.getAtlasManager()
-			.getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS);
 
 		RandomSource staticRandom = RandomSource.create(42L);
 		List<BakedQuad> myPatchQuads = this.getQuads(false, false, false, false, staticRandom);

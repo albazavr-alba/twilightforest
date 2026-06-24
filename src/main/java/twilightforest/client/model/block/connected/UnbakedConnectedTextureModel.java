@@ -1,15 +1,14 @@
 package twilightforest.client.model.block.connected;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.AbstractUnbakedModel;
 import net.neoforged.neoforge.client.model.StandardModelParameters;
@@ -46,16 +45,16 @@ public class UnbakedConnectedTextureModel extends AbstractUnbakedModel {
 			for (int i = 0; i < 4; ++i) {
 				net.minecraft.core.Vec3i corner = face.getUnitVec3i().offset(planeDirections[i].getUnitVec3i()).offset(planeDirections[(i + 1) % 4].getUnitVec3i()).offset(1, 1, 1).multiply(8);
 
-				org.joml.Vector3f from = new org.joml.Vector3f(
-					java.lang.Math.clamp(java.lang.Math.min(center - (16 - element.getSecond().x()), corner.getX() + element.getFirst().x()), 0, 16),
-					java.lang.Math.clamp(java.lang.Math.min(center - (16 - element.getSecond().y()), corner.getY() + element.getFirst().y()), 0, 16),
-					java.lang.Math.clamp(java.lang.Math.min(center - (16 - element.getSecond().z()), corner.getZ() + element.getFirst().z()), 0, 16)
+				Vector3f from = new Vector3f(
+					Mth.clamp(Math.min(center - (16 - element.getSecond().x()), corner.getX() + element.getFirst().x()), 0, 16),
+					Mth.clamp(Math.min(center - (16 - element.getSecond().y()), corner.getY() + element.getFirst().y()), 0, 16),
+					Mth.clamp(Math.min(center - (16 - element.getSecond().z()), corner.getZ() + element.getFirst().z()), 0, 16)
 				);
 
-				org.joml.Vector3f to = new org.joml.Vector3f(
-					element.getSecond().x() < center ? element.getSecond().x() : java.lang.Math.max(center, corner.getX() - (16 - element.getSecond().x())),
-					element.getSecond().y() < center ? element.getSecond().y() : java.lang.Math.max(center, corner.getY() - (16 - element.getSecond().y())),
-					element.getSecond().z() < center ? element.getSecond().z() : java.lang.Math.max(center, corner.getZ() - (16 - element.getSecond().z()))
+				Vector3f to = new Vector3f(
+					element.getSecond().x() < center ? element.getSecond().x() : Math.max(center, corner.getX() - (16 - element.getSecond().x())),
+					element.getSecond().y() < center ? element.getSecond().y() : Math.max(center, corner.getY() - (16 - element.getSecond().y())),
+					element.getSecond().z() < center ? element.getSecond().z() : Math.max(center, corner.getZ() - (16 - element.getSecond().z()))
 				);
 
 				MutableQuad baseQuad = new MutableQuad();
@@ -181,11 +180,7 @@ public class UnbakedConnectedTextureModel extends AbstractUnbakedModel {
 			this.renderOverlayOnAllFaces,
 			this.connectableBlocks,
 			finalBaseQuads,
-			finalConnectedQuads,
-			particleTexture,
-			this.parameters.ambientOcclusion(),
-			this.parameters.guiLight().lightLikeBlock(),
-			ItemTransforms.NO_TRANSFORMS,
-			Set.of(RenderTypes.cutoutMovingBlock()));
+			finalConnectedQuads
+		);
 	}
 }

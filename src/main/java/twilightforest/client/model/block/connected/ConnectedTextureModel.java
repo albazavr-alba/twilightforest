@@ -2,11 +2,8 @@ package twilightforest.client.model.block.connected;
 
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.ModelState;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
-import net.minecraft.client.resources.model.cuboid.ItemTransforms;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.geometry.QuadCollection;
 import net.minecraft.client.resources.model.geometry.UnbakedGeometry;
@@ -18,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -31,7 +27,7 @@ public class ConnectedTextureModel implements UnbakedGeometry {
 	private final List<Block> validConnectors;
 	private static final ModelProperty<@NotNull ConnectedTextureData> DATA = new ModelProperty<>();
 
-	public ConnectedTextureModel(Set<Direction> connectedFaces, Set<Direction> unculledFaces, boolean renderOverlayOnAllFaces, List<Block> connectableBlocks, Map<Direction, BakedQuad[]> baseQuads, Map<Direction, BakedQuad[][]> connectedQuads, TextureAtlasSprite particle, boolean usesAO, boolean usesBlockLight, ItemTransforms transforms, @Nullable Set<RenderType> renderTypes) {
+	public ConnectedTextureModel(Set<Direction> connectedFaces, Set<Direction> unculledFaces, boolean renderOverlayOnAllFaces, List<Block> connectableBlocks, Map<Direction, BakedQuad[]> baseQuads, Map<Direction, BakedQuad[][]> connectedQuads) {
 		this.connectedFaces = connectedFaces;
 		this.unculledFaces = unculledFaces;
 		this.renderOverlayOnAllFaces = renderOverlayOnAllFaces;
@@ -45,15 +41,15 @@ public class ConnectedTextureModel implements UnbakedGeometry {
 		QuadCollection.Builder builder = new QuadCollection.Builder();
 
 		for (Direction direction : this.unculledFaces) {
-			List<BakedQuad> quadList = this.getQuadsForFace(direction, ModelData.EMPTY);
-			for (BakedQuad quad : quadList) {
+			List<BakedQuad> unculledQuads = this.getQuadsForFace(direction, ModelData.EMPTY);
+			for (BakedQuad quad : unculledQuads) {
 				builder.addUnculledFace(quad);
 			}
 		}
 
 		for (Direction direction : Direction.values()) {
-			List<BakedQuad> standardQuads = this.getQuadsForFace(direction, ModelData.EMPTY);
-			for (BakedQuad quad : standardQuads) {
+			List<BakedQuad> culledQuads = this.getQuadsForFace(direction, ModelData.EMPTY);
+			for (BakedQuad quad : culledQuads) {
 				builder.addCulledFace(direction, quad);
 			}
 		}
