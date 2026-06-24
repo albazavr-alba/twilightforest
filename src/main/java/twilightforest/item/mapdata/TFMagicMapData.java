@@ -23,15 +23,27 @@ import twilightforest.util.Codecs;
 import java.util.*;
 
 public class TFMagicMapData extends MapItemSavedData {
+	private static final Codec<byte[]> COLORS_CODEC = Codec.BYTE.listOf()
+		.xmap(list -> {
+			byte[] arr = new byte[list.size()];
+			for (int i = 0; i < list.size(); i++) arr[i] = list.get(i);
+			return arr;
+		}, array -> {
+			List<Byte> list = new ArrayList<>(array.length);
+			for (byte b : array) list.add(b);
+			return list;
+		});
+
 	public static final Codec<TFMagicMapData> CODEC = RecordCodecBuilder.create(instance ->
 		instance.group(
 			Codec.INT.fieldOf("xCenter").forGetter(data -> data.centerX),
 			Codec.INT.fieldOf("zCenter").forGetter(data -> data.centerZ),
 			Codec.BYTE.fieldOf("scale").forGetter(data -> data.scale),
-			Codec.BOOL.optionalFieldOf("trackingPosition", true).forGetter(data -> true),
-			Codec.BOOL.optionalFieldOf("unlimitedTracking", false).forGetter(data -> false),
+			Codec.BOOL.optionalFieldOf("trackingPosition", true).forGetter(data -> data.trackingPosition),
+			Codec.BOOL.optionalFieldOf("unlimitedTracking", false).forGetter(data -> data.unlimitedTracking),
 			Codec.BOOL.optionalFieldOf("locked", false).forGetter(data -> data.locked),
 			ResourceKey.codec(Registries.DIMENSION).fieldOf("dimension").forGetter(data -> data.dimension),
+			COLORS_CODEC.fieldOf("colors").forGetter(data -> data.colors),
 			DecorationHolder.CODEC.listOf().optionalFieldOf("decorations", List.of()).forGetter(data -> {
 				List<DecorationHolder> holders = new ArrayList<>();
 				data.decorations.forEach((s, decoration) -> {
@@ -41,12 +53,12 @@ public class TFMagicMapData extends MapItemSavedData {
 				});
 				return holders;
 			}),
-
 			Codec.STRING.listOf().optionalFieldOf("conquered_structures", List.of()).forGetter(data -> data.conqueredStructures)
-
-		).apply(instance, (centerX, centerZ, scale, trackingPosition, unlimitedTracking, locked, dimension, decorationsList, conqueredList) -> {
+		).apply(instance, (centerX, centerZ, scale, trackingPosition, unlimitedTracking, locked, dimension, colorsArray, decorationsList, conqueredList) -> {
 			TFMagicMapData tfdata = new TFMagicMapData(centerX, centerZ, scale, trackingPosition, unlimitedTracking, locked, dimension);
-
+			if (colorsArray.length == tfdata.colors.length) {
+				System.arraycopy(colorsArray, 0, tfdata.colors, 0, colorsArray.length);
+			}
 			for (DecorationHolder decoration : decorationsList) {
 				MapDecoration mapdecoration1 = decoration.decoration();
 				MapDecoration mapdecoration = tfdata.decorations.put(decoration.id(), mapdecoration1);
@@ -54,17 +66,14 @@ public class TFMagicMapData extends MapItemSavedData {
 					if (mapdecoration != null && mapdecoration.type().value().trackCount()) {
 						tfdata.trackedDecorationCount--;
 					}
-
 					if (decoration.decoration().type().value().trackCount()) {
 						tfdata.trackedDecorationCount++;
 					}
 					tfdata.setDecorationsDirty();
 				}
 			}
-
 			tfdata.conqueredStructures.clear();
 			tfdata.conqueredStructures.addAll(conqueredList);
-
 			return tfdata;
 		})
 	);
