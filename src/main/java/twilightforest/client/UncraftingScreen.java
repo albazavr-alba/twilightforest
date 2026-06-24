@@ -172,7 +172,7 @@ public class UncraftingScreen extends AbstractContainerScreen<@NotNull Uncraftin
 	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
 		int frameX = this.leftPos;
 		int frameY = (this.height - this.imageHeight) / 2;
-		graphics.blitSprite(RenderPipelines.GUI, TEXTURE, frameX, frameY, this.imageWidth, this.imageHeight);
+		graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, frameX, frameY, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
 		UncraftingMenu tfContainer = this.menu;
 
@@ -320,7 +320,7 @@ public class UncraftingScreen extends AbstractContainerScreen<@NotNull Uncraftin
 				// what's up
 				if (!this.up) textureY += this.height;
 
-				graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.getX(), this.getY(), 0, 0, textureX, textureY, this.width, this.height);
+				graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.getX(), this.getY(), textureX, textureY, this.width, this.height, 256, 256);
 			}
 		}
 	}
@@ -347,7 +347,7 @@ public class UncraftingScreen extends AbstractContainerScreen<@NotNull Uncraftin
 				// what's up
 				if (!this.up) textureY += this.height;
 
-				graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.getX(), this.getY(), 0.0F, 0.0F, textureX, textureY, this.width, this.height);
+				graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.getX(), this.getY(), textureX, textureY, this.width, this.height, 256, 256);
 			}
 		}
 	}
