@@ -16,7 +16,6 @@ import twilightforest.client.state.entity.HydraRenderState;
 import twilightforest.entity.boss.Hydra;
 
 public class HydraRenderer extends MobRenderer<@NotNull Hydra, @NotNull HydraRenderState, @NotNull HydraModel> {
-
 	public static final Identifier TEXTURE = TwilightForestMod.getModelTexture("hydra4.png");
 
 	public HydraRenderer(EntityRendererProvider.Context context) {

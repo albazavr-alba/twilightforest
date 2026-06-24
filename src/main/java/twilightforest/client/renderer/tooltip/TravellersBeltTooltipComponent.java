@@ -28,7 +28,7 @@ public class TravellersBeltTooltipComponent implements ClientTooltipComponent {
 
 	@Override
 	public void extractImage(@NotNull Font font, int x, int y, int w, int h, GuiGraphicsExtractor guiGraphics) {
-		guiGraphics.blitSprite(RenderPipelines.GUI, BACKGROUND_SPRITE, x, y, this.backgroundWidth(), this.backgroundHeight());
+		guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITE, x, y, this.backgroundWidth(), this.backgroundHeight());
 		int k = 0;
 
 		for (int gridY = 0; gridY < gridSizeY(); gridY++) {
@@ -52,7 +52,7 @@ public class TravellersBeltTooltipComponent implements ClientTooltipComponent {
 	}
 
 	private void blit(GuiGraphicsExtractor guiGraphics, int x, int y) {
-		guiGraphics.blitSprite(RenderPipelines.GUI, Texture.SLOT.sprite, x, y, 0, Texture.SLOT.w, Texture.SLOT.h);
+		guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, Texture.SLOT.sprite, x, y, 0, Texture.SLOT.w, Texture.SLOT.h);
 	}
 
 	private int backgroundWidth() {

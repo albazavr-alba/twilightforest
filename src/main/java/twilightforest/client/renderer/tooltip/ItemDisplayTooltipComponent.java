@@ -26,7 +26,7 @@ public class ItemDisplayTooltipComponent implements ClientTooltipComponent {
 
 	@Override
 	public void extractImage(@NotNull Font font, int x, int y, int w, int h, GuiGraphicsExtractor guiGraphics) {
-		guiGraphics.blitSprite(RenderPipelines.GUI, BACKGROUND_SPRITE, x, y, this.backgroundWidth(), this.backgroundHeight());
+		guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITE, x, y, this.backgroundWidth(), this.backgroundHeight());
 		int k = 0;
 
 		for (int gridY = 0; gridY < gridSizeY(); gridY++) {
@@ -39,7 +39,7 @@ public class ItemDisplayTooltipComponent implements ClientTooltipComponent {
 	}
 
 	private void renderSlot(int x, int y, int itemIndex, GuiGraphicsExtractor graphics, Font font) {
-		graphics.blitSprite(RenderPipelines.GUI, SLOT_SPRITE, x, y, 0, SLOT_WIDTH, SLOT_HEIGHT);
+		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_SPRITE, x, y, 0, SLOT_WIDTH, SLOT_HEIGHT);
 
 		if (itemIndex < this.contents.size()) {
 			ItemStack itemstack = this.contents.get(itemIndex);

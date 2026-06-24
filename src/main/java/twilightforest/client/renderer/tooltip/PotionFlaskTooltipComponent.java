@@ -97,32 +97,37 @@ public class PotionFlaskTooltipComponent implements ClientTooltipComponent {
 			graphics.centeredText(font, Component.translatable("item.twilightforest.flask.empty"), x + (WIDTH / 2) + 1, y + 3, 16777215);
 		}
 
-		this.renderPotion(graphics, x + 1, y + 13, this.component.doses() * segmentSplit - 1, this.component.potion().getColor());
+		this.renderPotion(graphics, x + 1, y + 13, this.component.doses() * segmentSplit - 1, 13, this.component.potion().getColor());
 		if (this.component.breakage() > 0) {
 			int xPos = x + segmentSplit * (3 - this.component.breakage());
 			graphics.fill(xPos, y, xPos + (segmentSplit * this.component.breakage()), y + 13, 0xAA434343);
 		}
 		int widthProg = segmentSplit;
 		for (int i = 1; i < this.maxDoses; i++) {
-			graphics.blitSprite(RenderPipelines.GUI, DOSE_SPRITE, x + widthProg, y, 1, 13);
+			graphics.blit(RenderPipelines.GUI_TEXTURED, DOSE_SPRITE, x + widthProg, y, 0, 0, 1, 13, 1, 13);
 			widthProg += segmentSplit;
 		}
 
-		graphics.blitSprite(RenderPipelines.GUI, BORDER_SPRITE, x, y, WIDTH, 13);
+		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BORDER_SPRITE, x, y, WIDTH, 13);
 	}
 
-	private void renderPotion(GuiGraphicsExtractor guiGraphics, int xPosition, int yPosition, int desiredWidth, int color) {
+
+	private void renderPotion(GuiGraphicsExtractor guiGraphics, int xPosition, int yPosition, int desiredWidth, int desiredHeight, int color) {
+		if (desiredWidth <= 0 || desiredHeight <= 0) return;
+
 		Identifier waterLocation = Identifier.withDefaultNamespace("block/water_still");
 
-		guiGraphics.blitSprite(
-			RenderPipelines.GUI,
+		guiGraphics.blit(
+			RenderPipelines.GUI_TEXTURED,
 			waterLocation,
-			16, 16,
-			0, 0,
 			xPosition,
-			yPosition,
+			yPosition - desiredHeight,
+			0,
+			0,
 			desiredWidth,
-			13
+			desiredHeight,
+			16, 16,
+			color
 		);
 	}
 }
