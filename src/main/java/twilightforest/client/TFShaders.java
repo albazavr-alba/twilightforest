@@ -3,11 +3,13 @@ package twilightforest.client;
 import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.CompareOp;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
+import twilightforest.client.renderer.TFRenderPipelines;
 
 import java.util.Optional;
 
@@ -25,9 +27,8 @@ public class TFShaders {
 		RenderSetup.builder(AURORA_PIPELINE).createRenderSetup()
 	);
 
-	public static final RenderPipeline RED_THREAD = RenderPipeline.builder(RenderPipelines.BLOCK_SNIPPET)
-		.withLocation(Identifier.fromNamespaceAndPath("twilightforest", "red_thread/red_thread"))
-		.withVertexFormat(DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS)
-		.build();
+	public static final RenderType RED_THREAD = RenderType.create(
+		"twilightforest_red_thread",
+		RenderSetup.builder(TFRenderPipelines.RED_THREAD).createRenderSetup()
+	);
 }
-
