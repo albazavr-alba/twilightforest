@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UncraftingResultSlot extends ResultSlot {
-
 	private final Player player;
 	private final Container inputSlot;
 	private final UncraftingContainer uncraftingMatrix;
@@ -40,15 +39,21 @@ public class UncraftingResultSlot extends ResultSlot {
 		//clear the temp map, just in case
 		this.tempRemainderMap.clear();
 
-		RecipeManager recipeManager = player.level().getServer().getRecipeManager();
+		var currentServer = player.level().getServer();
+		if (currentServer == null) return;
+		RecipeManager recipeManager = currentServer.getRecipeManager();
+
+		CraftingInput inputForCheck = this.assemblyMatrix.asCraftInput();
 
 		for (RecipeHolder<@NotNull CraftingRecipe> recipe : recipeManager.recipeMap().byType(RecipeType.CRAFTING)) {
-			ItemStack resultStack = recipe.value().assemble(this.assemblyMatrix.asCraftInput());
+			try {
+				ItemStack resultStack = recipe.value().assemble(inputForCheck);
 
-			if (ItemStack.isSameItemSameComponents(resultStack, stack)) {
-				combined = false;
-				break;
-			}
+				if (ItemStack.isSameItemSameComponents(resultStack, stack)) {
+					combined = false;
+					break;
+				}
+			} catch (IndexOutOfBoundsException | IllegalArgumentException _) {}
 		}
 
 		if (combined) {
@@ -80,10 +85,10 @@ public class UncraftingResultSlot extends ResultSlot {
 		int j = positioned.top();
 		CommonHooks.setCraftingPlayer(player);
 		NonNullList<@NotNull ItemStack> remainingItems = NonNullList.withSize(input.size(), ItemStack.EMPTY);
-		var matchingRecipes = recipeManager.recipeMap().getRecipesFor(RecipeType.CRAFTING, input, player.level());
+		var matchingRecipes = recipeManager.recipeMap().getRecipesFor(RecipeType.CRAFTING, input, player.level()).toList();
 
-		if (!matchingRecipes.toList().isEmpty()) {
-			RecipeHolder<@NotNull CraftingRecipe> recipeHolder = matchingRecipes.toList().getFirst();
+		if (!matchingRecipes.isEmpty()) {
+			RecipeHolder<@NotNull CraftingRecipe> recipeHolder = matchingRecipes.getFirst();
 			remainingItems = recipeHolder.value().getRemainingItems(input);
 		}
 
