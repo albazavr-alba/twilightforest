@@ -2,6 +2,7 @@ package twilightforest.world.components.structures.finalcastle;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.FrontAndTop;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -34,6 +35,7 @@ import twilightforest.init.TFBlocks;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.world.components.structures.TFStructureComponentOld;
+import twilightforest.world.components.structures.TwilightJigsawPiece;
 import twilightforest.world.components.structures.util.StructureTemplateDefinitions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -65,21 +67,12 @@ public class FinalCastleBossGazeboComponent extends TFStructureComponentOld {
 	public void addChildren(StructurePiece parent, StructurePieceAccessor list, RandomSource rand) {
 		this.deco = new StructureTFDecoratorCastle();
 		this.deco.blockState = TFBlocks.VIOLET_CASTLE_RUNE_BRICK.get().defaultBlockState();
+
 		this.deco.fenceState = TFBlocks.VIOLET_FORCE_FIELD.get().defaultBlockState();
 
-		StructureTemplateManager templateManager = ServerLifecycleHooks.getCurrentServer().getStructureManager();
-
-		HolderLookup.Provider registries = ServerLifecycleHooks.getCurrentServer().registryAccess();
-
-		StructureTemplatePool templatePool = registries.lookupOrThrow(Registries.TEMPLATE_POOL).getOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL, GAZEBO_TEMP_POOL)).value();
-
-		StructurePoolElement poolElement = templatePool.getRandomTemplate(rand);
-
-		if (poolElement != null) {
-			BlockPos spawnPos = this.getWorldPos(10, -1, 10);
-
-			PoolElementStructurePiece piece = new PoolElementStructurePiece(templateManager, poolElement, spawnPos, poolElement.getGroundLevelDelta(), this.rotation, poolElement.getBoundingBox(templateManager, spawnPos, this.rotation), JigsawStructure.DEFAULT_LIQUID_SETTINGS);
-			list.addPiece(piece);
+		TwilightJigsawPiece templatePiece = TwilightJigsawPiece.initializeTemplateFromPool(GAZEBO_TEMP_POOL, this.getWorldPos(10, -1, 10), this.rotation.rotation().rotate(FrontAndTop.UP_SOUTH), "twilightforest:final_castle/final_boss", rand, this.genDepth + 1, ServerLifecycleHooks.getCurrentServer().getStructureManager());
+		if (templatePiece != null) {
+			list.addPiece(templatePiece);
 		}
 	}
 

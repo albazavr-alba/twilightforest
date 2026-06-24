@@ -70,6 +70,7 @@ public class CourtyardMain extends StructureMazeGenerator {
 		tagCompound.putBoolean("placeSpawner", this.placeSpawner);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public void addChildren(StructurePiece parent, StructurePieceAccessor list, RandomSource random) {
 		super.addChildren(parent, list, random);
@@ -81,7 +82,7 @@ public class CourtyardMain extends StructureMazeGenerator {
 		TwilightJigsawPiece bossSpawner = TwilightJigsawPiece.initializeTemplateFromPool(CENTER_POOL, pos.mutable(), oriented, "twilightforest:center", random, this.genDepth + 1, this.structureManager);
 		if (bossSpawner != null) {
 			list.addPiece(bossSpawner);
-			// bossSpawner.addChildren(parent, list, random);
+			bossSpawner.addChildren(parent, list, random);
 		}
 	}
 
