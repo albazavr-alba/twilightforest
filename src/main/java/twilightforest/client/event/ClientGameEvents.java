@@ -6,6 +6,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.SplashRenderer;
 import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.model.HeadedModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ShapeRenderer;
@@ -19,6 +21,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ChunkPos;
@@ -30,6 +34,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -46,6 +51,7 @@ import twilightforest.client.OptifineWarningScreen;
 import twilightforest.client.TFShaders;
 import twilightforest.client.renderer.TFSkyRenderer;
 import twilightforest.client.renderer.entity.MagicPaintingRenderer;
+import twilightforest.compat.curios.CuriosCompat;
 import twilightforest.config.TFConfig;
 import twilightforest.entity.boss.bar.ClientTFBossBar;
 import twilightforest.events.HostileMountEvents;
@@ -97,7 +103,7 @@ public class ClientGameEvents {
 		NeoForge.EVENT_BUS.addListener(this::setMusicInDimension);
 		NeoForge.EVENT_BUS.addListener(this::shakeCamera);
 		NeoForge.EVENT_BUS.addListener(this::translateBookAuthor);
-//		NeoForge.EVENT_BUS.addListener(this::unrenderHeadWithTrophies);
+		NeoForge.EVENT_BUS.addListener(this::unrenderHeadWithTrophies);
 		NeoForge.EVENT_BUS.addListener(this::updateBowFOV);
 
 //		NeoForge.EVENT_BUS.addListener(CloudEvents::renderPrecipitation);
@@ -189,7 +195,6 @@ public class ClientGameEvents {
 			PoseStack poseStack = event.getPoseStack();
 			poseStack.pushPose();
 
-			poseStack.translate(-pos.x(), -pos.y(), -pos.z());
 			PoseStack.Pose lastPose = poseStack.last();
 
 			consumer.addVertex(lastPose.pose(), -scale, y, scale).setColor(1F, 1F, 1F, alpha);
@@ -198,6 +203,7 @@ public class ClientGameEvents {
 			consumer.addVertex(lastPose.pose(), scale, y, scale).setColor(1F, 1F, 1F, alpha);
 
 			poseStack.popPose();
+			bufferSource.endBatch(TFShaders.AURORA);
 		}
 	}
 
@@ -308,27 +314,28 @@ public class ClientGameEvents {
 		}
 	}
 
-	// Uncomment this when Compat and Curios mods are ready
+	private void unrenderHeadWithTrophies(RenderLivingEvent.Pre<?, ?, ?> event) {
+		LocalPlayer localPlayer = Minecraft.getInstance().player;
+		if (localPlayer == null) {
+			return;
+		}
+		ItemStack stack = localPlayer.getItemBySlot(EquipmentSlot.HEAD);
+		boolean visible = !(stack.is(TFItemTags.TROPHIES)) && !areCuriosEquipped(localPlayer);
+		boolean isPlayer = true;
+		if (event.getRenderer().getModel() instanceof HeadedModel headedModel) {
+			headedModel.getHead().visible = visible && (!isPlayer || headedModel.getHead().visible);
+			if (event.getRenderer().getModel() instanceof HumanoidModel<?> humanoidModel) {
+				humanoidModel.hat.visible = visible && (!isPlayer || humanoidModel.hat.visible);
+			}
+		}
+	}
 
-//
-//	private void unrenderHeadWithTrophies(RenderLivingEvent.Pre<?, ?> event) {
-//		ItemStack stack = event.getEntity().getItemBySlot(EquipmentSlot.HEAD);
-//		boolean visible = !(stack.getItem() instanceof TrophyItem) && !areCuriosEquipped(event.getEntity());
-//		boolean isPlayer = event.getEntity() instanceof Player;
-//		if (event.getRenderer().getModel() instanceof HeadedModel headedModel) {
-//			headedModel.getHead().visible = visible && (!isPlayer || headedModel.getHead().visible);  // some mods like Better Combat can move player's head and hide it in the first person view
-//			if (event.getRenderer().getModel() instanceof HumanoidModel<?> humanoidModel) {
-//				humanoidModel.hat.visible = visible && (!isPlayer || humanoidModel.hat.visible);
-//			}
-//		}
-//	}
-//
-//	private boolean areCuriosEquipped(LivingEntity entity) {
-//		if (ModList.get().isLoaded("curios")) {
-//			return CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.getItem() instanceof TrophyItem);
-//		}
-//		return false;
-//	}
+	private boolean areCuriosEquipped(LivingEntity entity) {
+		if (ModList.get().isLoaded("curios")) {
+			return CuriosCompat.isCurioEquippedAndVisible(entity, stack -> stack.is(TFItemTags.TROPHIES));
+		}
+		return false;
+	}
 
 	private void translateBookAuthor(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();

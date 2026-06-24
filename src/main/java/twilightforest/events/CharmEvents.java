@@ -29,6 +29,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.neoforged.bus.api.EventPriority;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -40,6 +41,7 @@ import tamaized.beanification.PostConstruct;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.KeepsakeCasketBlock;
 import twilightforest.block.entity.SkullChestBlockEntity;
+import twilightforest.compat.curios.CuriosCompat;
 import twilightforest.config.TFConfig;
 import twilightforest.enums.BlockLoggingEnum;
 import twilightforest.init.TFBlocks;
@@ -424,17 +426,11 @@ public class CharmEvents {
 		return keptCasket || skipCasketCheck;
 	}
 
-	// Uncomment this when Curios mode is ready
-//	private static boolean hasCharmCurio(Item item, Player player) {
-//		if (ModList.get().isLoaded("curios")) {
-//			return CuriosCompat.findAndConsumeCurio(item, player);
-//		}
-//
-//		return false;
-//	}
-
-	// Temp stab
 	private static boolean hasCharmCurio(Item item, Player player) {
+		if (ModList.get().isLoaded("curios")) {
+			return CuriosCompat.findAndConsumeCurio(item, player);
+		}
+
 		return false;
 	}
 }

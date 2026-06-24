@@ -4,8 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.animal.wolf.AdultWolfModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.monster.silverfish.SilverfishModel;
 import net.minecraft.client.model.monster.slime.SlimeModel;
 import net.minecraft.client.model.monster.spider.SpiderModel;
@@ -62,6 +65,7 @@ import twilightforest.client.renderer.entity.layers.IceLayer;
 import twilightforest.client.renderer.entity.layers.ShieldLayer;
 import twilightforest.client.renderer.map.ConqueredMapIconRenderer;
 import twilightforest.client.renderer.map.MagicMapPlayerIconRenderer;
+import twilightforest.client.renderer.special.*;
 import twilightforest.client.renderer.tooltip.ItemDisplayTooltipComponent;
 import twilightforest.client.renderer.tooltip.PotionFlaskTooltipComponent;
 import twilightforest.client.renderer.tooltip.TravellersBeltTooltipComponent;
@@ -95,6 +99,7 @@ public class ClientRegistrationEvents {
 		bus.addListener(this::registerRangeProperties);
 		bus.addListener(this::registerSelectProperties);
 		bus.addListener(this::registerItemModels);
+		bus.addListener(this::registerSpecialModelRenderers);
 
 		bus.addListener(RegisterKeyMappingsEvent.class, event -> TFKeyBinds.KEY_MAPPINGS.forEach(event::register));
 
@@ -279,6 +284,11 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(TFBlockEntities.DRYING_RACK.get(), DryingRackRenderer::new);
 	}
 
+	private static LayerDefinition createFixedLayer(MeshDefinition mesh, int texWidth, int texHeight) {
+		mesh.getRoot().addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
+		return LayerDefinition.create(mesh, texWidth, texHeight);
+	}
+
 	private void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(TFModelLayers.ARCTIC_ARMOR_INNER, () -> LayerDefinition.create(ArcticArmorModel.addPieces(LayerDefinitions.INNER_ARMOR_DEFORMATION), 64, 32));
 		event.registerLayerDefinition(TFModelLayers.ARCTIC_ARMOR_OUTER, () -> LayerDefinition.create(ArcticArmorModel.addPieces(LayerDefinitions.OUTER_ARMOR_DEFORMATION), 64, 32));
@@ -308,7 +318,6 @@ public class ClientRegistrationEvents {
 
 		event.registerLayerDefinition(TFModelLayers.ADHERENT, AdherentModel::create);
 		event.registerLayerDefinition(TFModelLayers.ALPHA_YETI, AlphaYetiModel::create);
-		event.registerLayerDefinition(TFModelLayers.ARMORED_GIANT, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 32));
 		event.registerLayerDefinition(TFModelLayers.BIGHORN_SHEEP, BighornModel::create);
 		event.registerLayerDefinition(TFModelLayers.BIGHORN_SHEEP_BABY, () -> BighornModel.create().apply(BighornModel.BABY_TRANSFORMER));
 		event.registerLayerDefinition(TFModelLayers.BLOCKCHAIN_GOBLIN, BlockChainGoblinModel::create);
@@ -325,7 +334,6 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(TFModelLayers.DEER, DeerModel::create);
 		event.registerLayerDefinition(TFModelLayers.DEER_BABY, () -> DeerModel.create().apply(DeerModel.BABY_TRANSFORMER));
 		event.registerLayerDefinition(TFModelLayers.FIRE_BEETLE, FireBeetleModel::create);
-		event.registerLayerDefinition(TFModelLayers.GIANT_MINER, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 32));
 		event.registerLayerDefinition(TFModelLayers.HARBINGER_CUBE, HarbingerCubeModel::create);
 		event.registerLayerDefinition(TFModelLayers.HEDGE_SPIDER, SpiderModel::createSpiderBodyLayer);
 		event.registerLayerDefinition(TFModelLayers.HELMET_CRAB, HelmetCrabModel::create);
@@ -338,10 +346,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(TFModelLayers.KING_SPIDER, SpiderModel::createSpiderBodyLayer);
 		event.registerLayerDefinition(TFModelLayers.KNIGHT_PHANTOM, KnightPhantomModel::create);
 		event.registerLayerDefinition(TFModelLayers.KOBOLD, KoboldModel::create);
-		event.registerLayerDefinition(TFModelLayers.LICH_MINION, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
 		event.registerLayerDefinition(TFModelLayers.LICH, LichModel::create);
 		event.registerLayerDefinition(TFModelLayers.LOWER_GOBLIN_KNIGHT, LowerGoblinKnightModel::create);
-		event.registerLayerDefinition(TFModelLayers.LOYAL_ZOMBIE, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
 		event.registerLayerDefinition(TFModelLayers.MAZE_SLIME, SlimeModel::createInnerBodyLayer);
 		event.registerLayerDefinition(TFModelLayers.MAZE_SLIME_OUTER, SlimeModel::createOuterBodyLayer);
 		event.registerLayerDefinition(TFModelLayers.MINOSHROOM, MinoshroomModel::create);
@@ -350,7 +356,6 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(TFModelLayers.MOSQUITO_SWARM, MosquitoSwarmModel::create);
 		event.registerLayerDefinition(TFModelLayers.NAGA, NagaModel::create);
 		event.registerLayerDefinition(TFModelLayers.NAGA_BODY, NagaModel::create);
-		event.registerLayerDefinition(TFModelLayers.NOOP, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 0, 0));
 		event.registerLayerDefinition(TFModelLayers.PENGUIN, PenguinModel::create);
 		event.registerLayerDefinition(TFModelLayers.PENGUIN_BABY, () -> PenguinModel.create().apply(PenguinModel.BABY_TRANSFORMER));
 		event.registerLayerDefinition(TFModelLayers.PINCH_BEETLE, PinchBeetleModel::create);
@@ -358,9 +363,6 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(TFModelLayers.QUEST_RAM, QuestRamModel::create);
 		event.registerLayerDefinition(TFModelLayers.RAVEN, RavenModel::create);
 		event.registerLayerDefinition(TFModelLayers.REDCAP, RedcapModel::create);
-		event.registerLayerDefinition(TFModelLayers.REDCAP_ARMOR_INNER, () -> LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(0.25F), 0.7F), 64, 32));
-		event.registerLayerDefinition(TFModelLayers.REDCAP_ARMOR_OUTER, () -> LayerDefinition.create(HumanoidModel.createMesh(new CubeDeformation(0.65F), 0.7F), 64, 32));
-		event.registerLayerDefinition(TFModelLayers.RISING_ZOMBIE, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
 		event.registerLayerDefinition(TFModelLayers.ROVING_CUBE, CubeOfAnnihilationModel::create);
 		event.registerLayerDefinition(TFModelLayers.SKELETON_DRUID, SkeletonDruidModel::create);
 		event.registerLayerDefinition(TFModelLayers.SLIME_BEETLE, SlimeBeetleModel::create);
@@ -390,6 +392,15 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(TFModelLayers.RED_THREAD, RedThreadModel::create);
 
 		event.registerLayerDefinition(TFModelLayers.KNIGHTMETAL_SHIELD, KnightmetalShieldModel::create);
+
+		event.registerLayerDefinition(TFModelLayers.ARMORED_GIANT, () -> createFixedLayer(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 32));
+		event.registerLayerDefinition(TFModelLayers.GIANT_MINER, () -> createFixedLayer(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 32));
+		event.registerLayerDefinition(TFModelLayers.LICH_MINION, () -> createFixedLayer(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
+		event.registerLayerDefinition(TFModelLayers.LOYAL_ZOMBIE, () -> createFixedLayer(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
+		event.registerLayerDefinition(TFModelLayers.NOOP, () -> createFixedLayer(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 0, 0));
+		event.registerLayerDefinition(TFModelLayers.REDCAP_ARMOR_INNER, () -> createFixedLayer(HumanoidModel.createMesh(new CubeDeformation(0.25F), 0.7F), 64, 32));
+		event.registerLayerDefinition(TFModelLayers.REDCAP_ARMOR_OUTER, () -> createFixedLayer(HumanoidModel.createMesh(new CubeDeformation(0.65F), 0.7F), 64, 32));
+		event.registerLayerDefinition(TFModelLayers.RISING_ZOMBIE, () -> createFixedLayer(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
 	}
 
 	private void registerParticleFactories(RegisterParticleProvidersEvent event) {
@@ -423,6 +434,21 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(TFParticleType.TWILIGHT_ORB.get(), (SpriteSet sprite) -> new CustomTextureParticle.Factory(sprite, true));
 		event.registerSpriteSet(TFParticleType.SHIELD_BREAK.get(), CustomTextureParticle.ShieldBreak::new);
 	}
+
+	private void registerSpecialModelRenderers(RegisterSpecialModelRendererEvent event) {
+		event.register(TwilightForestMod.prefix("item/template_skull_candle"), SkullCandleSpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("item/template_trophy"), TrophySpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("block/mason_jar"), MasonJarSpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("block/candelabra"), CandelabraSpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("item/mystic_crown"), MysticCrownSpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("item/knightmetal_shield"), KnightmetalShieldSpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("item/keepsake_casket"), KeepsakeCasketSpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("item/skull_chest"), SkullChestSpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("item/cicada"), CicadaSpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("item/firefly"), FireflySpecialRenderer.Unbaked.MAP_CODEC);
+		event.register(TwilightForestMod.prefix("item/moonworm"), MoonwormSpecialRenderer.Unbaked.MAP_CODEC);
+	}
+
 
 	private void registerClientExtensions(RegisterClientExtensionsEvent event) {
 		event.registerBlock(new IClientBlockExtensions() {

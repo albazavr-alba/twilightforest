@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -26,6 +27,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
+import twilightforest.compat.curios.CuriosCompat;
 import twilightforest.entity.monster.DeathTome;
 import twilightforest.entity.passive.Bighorn;
 import twilightforest.entity.passive.DwarfRabbit;
@@ -38,7 +40,6 @@ import twilightforest.network.CreateMovingCicadaSoundPacket;
 
 @Component
 public class MiscEvents {
-
 	@PostConstruct
 	private void setup() {
 		NeoForge.EVENT_BUS.addListener(this::addPrey);
@@ -75,11 +76,10 @@ public class MiscEvents {
 		// from what I can see, vanilla doesn't have a hook for this in the item class. So this will have to do.
 		// we only have to check equipping, when its unequipped the sound instance handles the rest
 
-		// Uncomment this when Curios mod is ready
 		//if we have a cicada in our curios slot, don't try to run this
-//		 if (ModList.get().isLoaded("curios")) {
-//		 	if (CuriosCompat.isCurioEquipped(living, stack -> stack.is(TFBlocks.CICADA.asItem()))) return;
-//		 }
+		 if (ModList.get().isLoaded("curios")) {
+		 	if (CuriosCompat.isCurioEquipped(living, stack -> stack.is(TFBlocks.CICADA.asItem()))) return;
+		 }
 
 		if (!living.level().isClientSide() && event.getSlot() == EquipmentSlot.HEAD && event.getTo().is(TFBlocks.CICADA.asItem())) {
 			PacketDistributor.sendToPlayersTrackingEntityAndSelf(living, new CreateMovingCicadaSoundPacket(living.getId()));
