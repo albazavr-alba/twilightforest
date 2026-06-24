@@ -16,7 +16,6 @@ import twilightforest.entity.passive.QuestRam;
 import twilightforest.entity.passive.quest.ram.QuestingRamCurrentContext;
 
 public class QuestingRamIndicatorOverlay {
-
 	private static final Identifier QUESTING_RAM_CHECK_SPRITE = TwilightForestMod.prefix("questing_ram_check");
 	private static final Identifier QUESTING_RAM_X_SPRITE = TwilightForestMod.prefix("questing_ram_x");
 
@@ -33,9 +32,9 @@ public class QuestingRamIndicatorOverlay {
 							int j = ((graphics.guiHeight() - 1) / 2) - 11;
 							int k = ((graphics.guiHeight() - 1) / 2) - 3;
 							if (!ram.isColorPresent(questEntry.getKey())) {
-								graphics.blitSprite(RenderPipelines.GUI, QUESTING_RAM_X_SPRITE, k, j, 7, 7);
+								graphics.blitSprite(RenderPipelines.GUI_TEXTURED, QUESTING_RAM_X_SPRITE, k, j, 7, 7);
 							} else {
-								graphics.blitSprite(RenderPipelines.GUI, QUESTING_RAM_CHECK_SPRITE, k, j, 7, 7);
+								graphics.blitSprite(RenderPipelines.GUI_TEXTURED, QUESTING_RAM_CHECK_SPRITE, k, j, 7, 7);
 							}
 							break;
 						}
