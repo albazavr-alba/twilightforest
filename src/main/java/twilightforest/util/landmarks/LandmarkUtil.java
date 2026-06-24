@@ -1,9 +1,12 @@
 package twilightforest.util.landmarks;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.jsonrpc.methods.GameRulesService;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -13,14 +16,17 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.fml.startup.Client;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.entity.EnforcedHomePoint;
 import twilightforest.init.TFAdvancements;
 import twilightforest.init.TFGameRules;
+import twilightforest.network.EnforceProgressionStatusPacket;
 import twilightforest.tags.TFStructureTags;
 import twilightforest.world.components.structures.start.TFStructureStart;
 import twilightforest.world.components.structures.util.CustomStructureData;
@@ -131,7 +137,13 @@ public final class LandmarkUtil {
 	}
 
 	public static boolean isProgressionEnforced(ClientLevel level) {
-		return level.getServer().getGameRules().get(TFGameRules.ENFORCED_PROGRESSION_RULE.get());
+		MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
+		if (server != null) {
+			return server.getGameRules().get(TFGameRules.ENFORCED_PROGRESSION_RULE.get());
+		} else if (level.getServer() != null) {
+			return level.getServer().getGameRules().get(TFGameRules.ENFORCED_PROGRESSION_RULE.get());
+		}
+		return EnforceProgressionStatusPacket.CLIENT_ENFORCE_PROGRESSION;
 	}
 
 	private LandmarkUtil() {
