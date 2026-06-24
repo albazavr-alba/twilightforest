@@ -48,6 +48,6 @@ public class Restrictions {
 	}
 
 	public static ItemStack asStack(ItemLike itemLike) {
-		return new ItemStack(itemLike);
+		return ItemStack.EMPTY;
 	}
 }

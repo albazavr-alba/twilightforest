@@ -55,7 +55,7 @@ public class TemplateMarkerHandlers {
 	public static void bootstrap(BootstrapContext<TemplateMarkerHandlerList> context) {
 		BlockPlaceMarkerHandler campfireSeat = new BlockPlaceMarkerHandler(new WeightedStateProvider(WeightedList.<BlockState>builder()
 			.add(TFBlocks.TWILIGHT_OAK_SLAB.value().defaultBlockState(), 1)
-			.add(Blocks.AIR.defaultBlockState(), 3)
+			.add(Blocks.CAVE_AIR.defaultBlockState(), 3)
 			.build()));
 
 		DryingRackMarkerHandler armorRack = new DryingRackMarkerHandler(SimpleStateProvider.simple(TFBlocks.CANOPY_DRYING_RACK.value()), TFLootTables.CAMP_ARMOR_RACK);
