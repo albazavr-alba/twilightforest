@@ -29,7 +29,7 @@ public abstract class TFThrowable extends ThrowableItemProjectile implements ITF
 
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
-
+		super.defineSynchedData(builder);
 	}
 
 	public void makeTrail(ParticleOptions particle, int amount) {

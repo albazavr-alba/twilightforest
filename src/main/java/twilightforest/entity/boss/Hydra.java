@@ -1,12 +1,8 @@
 package twilightforest.entity.boss;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -578,15 +574,13 @@ public class Hydra extends BaseTFBoss {
 	}
 
 	public boolean attackEntityFromPart(HydraPart part, DamageSource source, float damage) {
-		if (!(this.level() instanceof ServerLevel)) {
+		if (!(this.level() instanceof ServerLevel server)) {
 			return false;
 		}
 
 		// if we're in a wall, kill that wall
-		ServerLevel server = null;
-		if (this.level() instanceof ServerLevel serverLevel && source.is(DamageTypes.IN_WALL)) {
-			this.destroyBlocksInAABB(serverLevel, part.getBoundingBox());
-			server = serverLevel;
+		if (source.is(DamageTypes.IN_WALL)) {
+			this.destroyBlocksInAABB(server, part.getBoundingBox());
 		}
 
 		if (source.getEntity() == this || source.getDirectEntity() == this)
@@ -737,7 +731,7 @@ public class Hydra extends BaseTFBoss {
 	}
 
 	@Override
-	public ResourceKey<Structure> getHomeStructure() {
+	public ResourceKey<@NotNull Structure> getHomeStructure() {
 		return TFStructures.HYDRA_LAIR;
 	}
 
