@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.entity.MagicPaintingVariant;
@@ -34,6 +35,7 @@ public class TFRegistries {
 	public static final Registry<@NotNull TemplateMarkerHandlerType> TEMPLATE_MARKER_HANDLER_TYPES = new RegistryBuilder<>(Keys.TEMPLATE_MARKER_HANDLER_TYPE).create();
 	public static final Registry<@NotNull ItemDisplayType> ITEM_DISPLAY_TYPE = new RegistryBuilder<>(Keys.ITEM_DISPLAY_TYPE).sync(true).create();
 	public static final Registry<@NotNull MapCodec<? extends TravellersModifier>> TRAVELLERS_MODIFIER_TYPE = new RegistryBuilder<>(Keys.TRAVELLERS_MODIFIER_TYPE).sync(true).create();
+	public static final Registry<Item> SPAWN_EGGS = new RegistryBuilder<>(Keys.SPAWN_EGGS).create();
 
 	public static final class Keys {
 		public static final String REGISTRY_NAMESPACE = "twilight";
@@ -45,6 +47,7 @@ public class TFRegistries {
 		public static final ResourceKey<@NotNull Registry<@NotNull TemplateMarkerHandlerType>> TEMPLATE_MARKER_HANDLER_TYPE = ResourceKey.createRegistryKey(TwilightForestMod.prefix("template_marker_handler_type"));
 		public static final ResourceKey<@NotNull Registry<@NotNull ItemDisplayType>> ITEM_DISPLAY_TYPE = ResourceKey.createRegistryKey(namedRegistry("item_display_type"));
 		public static final ResourceKey<@NotNull Registry<@NotNull MapCodec<? extends TravellersModifier>>> TRAVELLERS_MODIFIER_TYPE = ResourceKey.createRegistryKey(namedRegistry("travellers_modifier_type"));
+		public static final ResourceKey<Registry<Item>> SPAWN_EGGS = ResourceKey.createRegistryKey(namedRegistry("spawn_eggs"));
 
 		//Datapack Registries
 		public static final ResourceKey<@NotNull Registry<@NotNull BiomeLayerFactory>> BIOME_STACK = ResourceKey.createRegistryKey(namedRegistry("biome_layer_stack"));

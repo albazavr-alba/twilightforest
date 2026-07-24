@@ -182,6 +182,7 @@ public class RegistrationEvents {
 		event.register(TFRegistries.TEMPLATE_MARKER_HANDLER_TYPES);
 		event.register(TFRegistries.ITEM_DISPLAY_TYPE);
 		event.register(TFRegistries.TRAVELLERS_MODIFIER_TYPE);
+		event.register(TFRegistries.SPAWN_EGGS);
 	}
 
 	public void setRegistriesForDatapack(DataPackRegistryEvent.NewRegistry event) {

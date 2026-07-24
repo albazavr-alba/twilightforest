@@ -12,8 +12,10 @@ import net.minecraft.world.entity.vehicle.boat.Boat;
 import net.minecraft.world.entity.vehicle.boat.ChestBoat;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jspecify.annotations.Nullable;
+import twilightforest.TFRegistries;
 import twilightforest.TwilightForestMod;
 import twilightforest.entity.*;
 import twilightforest.entity.boss.*;
@@ -28,7 +30,7 @@ import java.util.function.Supplier;
 public class TFEntities {
 
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TwilightForestMod.ID);
-	public static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(Registries.ITEM, TwilightForestMod.ID);
+	public static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(TFRegistries.SPAWN_EGGS, TwilightForestMod.ID);
 	public static final Map<Holder<EntityType<?>>, Supplier<AttributeSupplier.Builder>> ATTRIBUTES = new HashMap<>();
 	public static final Map<Holder<EntityType<?>>, SpawnPlacements.SpawnPredicate<?>> SPAWN_PREDICATES = new HashMap<>();
 
@@ -152,7 +154,8 @@ public class TFEntities {
 
 	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, Supplier<AttributeSupplier.Builder> attributes, SpawnPlacements.@Nullable SpawnPredicate<E> predicate) {
 		DeferredHolder<EntityType<?>, EntityType<E>> ret = ENTITY_TYPES.register(name, () -> builder.build(createIDFor(name)));
-		TFItems.register(name + "_spawn_egg", Item::new, () -> new Item.Properties().spawnEgg(ret.get()));
+		DeferredItem<? extends Item> spawnEgg = TFItems.register(name + "_spawn_egg", Item::new, () -> new Item.Properties().spawnEgg(ret.get()));
+		SPAWN_EGGS.register(name, spawnEgg::value);
 		ATTRIBUTES.put(ret, attributes);
 		if (predicate != null) {
 			SPAWN_PREDICATES.put(ret, predicate);
